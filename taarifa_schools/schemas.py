@@ -4,7 +4,7 @@ school_schema = {
         'type': 'integer',
         'label': 'Object ID',
     },
-    'school_code': {
+    'code': {
         'type': 'string',
         'label': 'School code',
     },
