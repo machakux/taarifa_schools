@@ -1,9 +1,12 @@
 # Resource schema
 school_schema = {
     'object_id': {
-        # Idealy this should be unique and parmanent
         'type': 'integer',
         'label': 'Object ID',
+    },
+    'school_code': {
+        'type': 'string',
+        'label': 'School code',
     },
     'name': {
         'type': 'string',
@@ -23,7 +26,7 @@ school_schema = {
     },
     'district_code': {
         'type': 'integer',
-        'label': 'District Code',
+        'label': 'District code',
     },
     'ward': {
         'type': 'string',
@@ -31,16 +34,63 @@ school_schema = {
     },
     'ward_code': {
         'type': 'string',
-        'label': 'Ward Code',
-    },
-    'district': {
-        'type': 'string',
-        'label': 'District',
+        'label': 'Ward code',
     },
     'village': {
         'type': 'string',
         'label': 'Village',
-    }
+    },
+    'subvillage': {
+        'type': 'string',
+        'label': 'Subvillage',
+    },
+    'location': {
+        'type': 'point',
+    },
+    'district_rank': {
+        'type': 'integer',
+        'label': 'District rank',
+    },
+    'regional_rank': {
+        'type': 'integer',
+        'label': 'Regional rank',
+    },
+    'national_rank': {
+        'type': 'integer',
+        'label': 'National rank',
+    },
+    'percentage_pass': {
+        'type': 'integer',
+        'label': 'Percentage pass',
+        'min': 0,
+        'max': 100,
+    },
+    'candidates_number': {
+        'type': 'integer',
+        'label': 'Number of candidates',
+    },
+    'examination_year': {
+        'type': 'integer',
+        'label': 'Percentage pass year',
+        'min': 1900,
+        'max': 9999,
+    },
+    'school_type': {
+        'type': 'string',
+        'label': 'School type',
+    },
+    'students_number': {
+        'type': 'integer',
+        'label': 'Number of students',
+    },
+    'teachers_number': {
+        'type': 'integer',
+        'label': 'Number of teachers',
+    },
+    'date_recorded': {
+        'type': 'datetime',
+        'label': 'Date recorded',
+    },
 }
 
 # Facility schema
@@ -63,3 +113,4 @@ service_schema = {
     "group": "education",
     "service_code": "scs001"
 }
+
