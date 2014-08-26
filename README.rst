@@ -71,7 +71,6 @@ From the taarifa_schools directory run the following commands to
 create the school schemas: ::
 
   python manage.py create_facility
-  python manage.py create_service
 
 Start the application from the taarifa_schools directory by running: ::
 
