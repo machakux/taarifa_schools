@@ -17,8 +17,8 @@ is broken).
 For information on how to get inovoled, scroll to the Contributing section
 at the bottom of the page.
 
-Schools
-_______
+Taarifa Schools
+_______________
 
 This repository contains an example application around Schools
 Management built on top of the core API.
@@ -92,6 +92,18 @@ and navigate to: ::
 
 This should show a list of all the school resources currently in the
 database.
+
+Documentation
+_____________
+
+Sphinx based documentation is available under the ``docs`` folder.
+You can generate html documetation from ``docs`` directory by running
+
+  make html
+
+This will generate html documentation within a build directory.
+For more information visit http://sphinx-doc.org/tutorial.html#running-the-build
+or http://sphinx-doc.org/invocation.html.
 
 .. _Python: http://python.org
 .. _pip: https://pip.pypa.io/en/latest/installing.html
