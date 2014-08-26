@@ -10,7 +10,7 @@ school_schema = {
     },
     'name': {
         'type': 'string',
-        'label': 'Name',
+        'label': 'School Name',
     },
     'region': {
         'type': 'string',
