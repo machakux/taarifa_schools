@@ -87,7 +87,7 @@ school_schema = {
         'type': 'integer',
         'label': 'Number of teachers',
     },
-    'date_recorded': {
+    'recording_date': {
         'type': 'datetime',
         'label': 'Date recorded',
     },
