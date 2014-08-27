@@ -98,7 +98,9 @@ _____________
 Sphinx based documentation is available under the ``docs`` folder.
 You can generate html documetation from ``docs`` directory by running
 
-  make html
+::
+
+    make html
 
 This will generate html documentation within a build directory.
 For more information visit http://sphinx-doc.org/tutorial.html#running-the-build
