@@ -15,7 +15,9 @@ from . import settings
 
 RESOURCE_URL = getattr(settings, 'RESOURCE_URL', app.config['URL_PREFIX'])
 
-
+# Resources of different types are stored in one collection.
+# TODO: Perform queries per resource type.
+ 
 @app.route(RESOURCE_URL + 'values/<field>')
 def resource_values(field):
     """
