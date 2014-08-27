@@ -3,17 +3,118 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Taarifa Schools' documentation!
+Welcome to Taarifa Schools documentation!
 ==========================================
 
+Background
+__________
 
-Introduction
-============
-The core ``TaarifaAPI`` provides a base platform for building various types of services management systems.
+Taarifa_ is an open source platform for the crowd sourced reporting and
+triaging of infrastructure related issues. Think of it as a bug tracker
+for the real world which helps to engage citizens with their local
+government.
+
+The Taarifa platform is built around the `Taarifa API`_, a RESTful
+service offering that clients can interact with to create and triage
+'bugreports' relating to public infrastructure (e.g., the public toilet
+is broken).
+
+For information on how to get inovoled, scroll to the Contributing section
+at the bottom of the page.
+
+Taarifa Schools
+_______________
+
+This repository contains an example application around Schools
+Management built on top of the core API.
+
+.. _Taarifa: http://taarifa.org
+.. _Taarifa API: http://github.com/taarifa/TaarifaAPI
+
+Prerequisites
+_____________
+
+Taarifa requires Python_, pip_, and MongoDB_ to be available on
+the system.
+
+Installation
+____________
+
+Requires Python, pip and the `Taarifa API`_ to be installed and MongoDB to
+be running.
+
+To ease development and debugging we suggest you use virtualenv_. 
+Install virtualenv_ and virtualenvwrapper (you might need admin rights for this): ::
+
+  pip install virtualenv virtualenvwrapper
+
+`Set up virtualenvwrapper`_ according to your shell and create a virtualenv: ::
+
+  mkvirtualenv TaarifaAPI
+
+If you already created the virtualenv for the `Taarifa API`_, activate it: ::
+
+  workon TaarifaAPI
+
+Clone the repository ::
+
+  git clone https://github.com/machakux/taarifa_schools
+
+Change into directory and install the requirements ::
+  
+  cd taarifa_schools
+  pip install -r requirements/dev.txt
+
+Usage
+_____
+
+Make sure the virtualenv is active: ::
+
+  workon TaarifaAPI
+
+From the taarifa_schools directory run the following commands to
+create the school schemas: ::
+
+  python manage.py create_facility
+
+Start the application from the taarifa_schools directory by running: ::
+
+  python manage.py runserver -r -d
+
+By default the API server is only accessible from the local machine. If access
+from the outside is required (e.g. when running from inside a VM), run: ::
+
+  python manage.py runserver -h 0.0.0.0 -r -d
+
+The flags ``-r`` and ``-d`` cause the server to run in debug mode and reload
+automatically when files are changed.
+
+To verify things are working, open a browser (on the host when using the VM)
+and navigate to: ::
+
+  http://localhost:5000/api/schools
+
+This should show a list of all the school resources currently in the
+database.
+
+Building documentation
+______________________
+
+Sphinx based documentation is available under the ``docs`` folder.
+You can generate html documetation from ``docs`` directory by running:
+
+::
+
+    make html
+
+This will generate html documentation within a build directory.
+For more information visit http://sphinx-doc.org/tutorial.html#running-the-build
+or http://sphinx-doc.org/invocation.html.
+
 
 
 How to create a new Taarifa Service with Taarifa API
-====================================================
+____________________________________________________
 
 Setting up Taarifa API development enviroment
 ---------------------------------------------
@@ -73,7 +174,6 @@ A **resource:** is particular addressable piece of infrastructure (e.g., Church 
             'label': 'Breakdown date',
         },
     }
-
 
 Facility schema
 ~~~~~~~~~~~~~~~
@@ -164,7 +264,6 @@ In ``projectname/manage.py`` add the following to create management commands tha
     if __name__ == "__main__":
         manager.run()
 
-
 Schema registation
 ------------------
 
@@ -194,5 +293,12 @@ The ``-r`` and ``d`` optional parameter are to enable autoreload and debug mode 
 
 And thats it. Now you can check your API service from a web browser by just visting http://127.0.0.1:5000/
 
-
+.. _Python: http://python.org
+.. _pip: https://pip.pypa.io/en/latest/installing.html
+.. _MongoDB: http://mongodb.org
+.. _virtualenv: http://virtualenv.org
+.. _Set up virtualenvwrapper: http://virtualenvwrapper.readthedocs.org/en/latest/install.html#shell-startup-file
+.. _Taarifa: http://taarifa.org
+.. _taarifa-dev: https://groups.google.com/forum/#!forum/taarifa-dev
+.. _Taarifa API: http://github.com/taarifa/TaarifaAPI
 
