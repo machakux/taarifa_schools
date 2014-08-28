@@ -1,0 +1,28 @@
+{
+  "name": "taaraifa_schools",
+  "version": "0.0.0",
+  "homepage": "https://github.com/machakux/taarifa_schools",
+  "description": "Taarifa Schools",
+  "main": "scripts/app.coffee",
+  "keywords": [
+    "infrastructure",
+    "water"
+  ],
+  "license": "Apache 2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-gettext": "~1.1.0",
+    "angular-gridster": "~0.9.16",
+    "PruneCluster": "~0.8.0",
+    "angularjs-geolocation": "~0.1.1",
+    "leaflet-maskcanvas": "git://github.com/domoritz/leaflet-maskcanvas",
+    "leaflet-heatmap": "git://github.com/pa7/heatmap.js#develop",
+    "angular-flash": "~0.1.13"
+  }
+}

@@ -14,8 +14,8 @@ msgstr ""
 
 #: app/index.html
 msgid "Home"
-msgstr ""
+msgstr "Nyumbani"
 
 #: app/index.html
 msgid "Taarifa Schools"
-msgstr ""
+msgstr "Taarifa za Shule"
