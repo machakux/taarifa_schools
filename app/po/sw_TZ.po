@@ -1,20 +1,51 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TaarifaWaterpoints\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: Taarifa <info@taarifa.org>\n"
-"Language: sw_TZ\n"
-"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: app/index.html
+msgid "Dashboard"
+msgstr "Kiujumla"
+
+#: app/views/main.html
+msgid "Filter map view"
+msgstr "Monekano wa ramani"
 
 #: app/index.html
 msgid "Home"
 msgstr "Nyumbani"
+
+#: app/views/main.html
+msgid "LGA"
+msgstr "Halmashauri"
+
+#: app/views/main.html
+msgid "Max no. results"
+msgstr "Idadi"
+
+#: app/views/dashboard.html
+msgid "National"
+msgstr "Kitaifa"
+
+#: .tmp/scripts/controllers.js
+msgid "No items match your filter criteria!"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Print"
+msgstr "Chapisha"
+
+#: app/views/dashboard.html
+msgid "Publish"
+msgstr "Sambaza"
+
+#: app/views/main.html
+msgid "Region"
+msgstr "Mkoa"
+
+#: app/views/dashboard.html
+msgid "Regional"
+msgstr "Kimkoa"
 
 #: app/index.html
 msgid "Taarifa Schools"
