@@ -13,7 +13,9 @@ from taarifa_api import api as app, main
 from . import settings
 
 
-RESOURCE_URL = getattr(settings, 'RESOURCE_URL', app.config['URL_PREFIX'])
+RESOURCE_URL = getattr(settings, 'RESOURCE_URL',
+                       app.config['URL_PREFIX'])
+
 
 # Resources of different types are stored in one collection.
 # TODO: Perform queries per resource type.
@@ -21,13 +23,15 @@ RESOURCE_URL = getattr(settings, 'RESOURCE_URL', app.config['URL_PREFIX'])
 @app.route(RESOURCE_URL + 'values/<field>')
 def resource_values(field):
     """
-    Return the unique values for a given field in the resource collection.
+    Return the unique values for a given field in the resource
+    collection.
     """
     # FIXME: Direct call to the PyMongo driver, should be abstracted
     resources = app.data.driver.db['resources']
     if request.args:
         resources = resources.find(dict(request.args.items()))
-    return send_response('resources', (sorted(resources.distinct(field)),))
+    return send_response('resources',
+                         (sorted(resources.distinct(field)),))
 
 
 @app.route(RESOURCE_URL + 'count/<field>')
@@ -38,7 +42,8 @@ def resource_count(field):
     # FIXME: Direct call to the PyMongo driver, should be abstracted
     resources = app.data.driver.db['resources']
     return send_response('resources', (resources.group(
-        field.split(','), dict(request.args.items()), initial={'count': 0},
+        field.split(','), dict(request.args.items()),
+        initial={'count': 0},
         reduce="function(curr, result) {result.count++;}"),))
 
 
@@ -46,8 +51,8 @@ def resource_count(field):
 def resource_stats(field, group):
     """
     Return number of resources per given field grouped by a certain
-    attribute (Example: number of waterpoints of a given status grouped by a
-    region.
+    attribute (Example: number of waterpoints of a given status
+    grouped by region.
     """
     # FIXME: Direct call to the PyMongo driver, should be abstracted
     resources = app.data.driver.db['resources']
@@ -90,22 +95,27 @@ def resource_stats(field, group):
 
 @app.route('/scripts/<path:filename>')
 def scripts(filename):
-    return send_from_directory(app.root_path + '/dist/scripts/', filename)
+    return send_from_directory(app.root_path + '/dist/scripts/',
+                               filename)
 
 
 @app.route('/styles/<path:filename>')
 def styles(filename):
-    return send_from_directory(app.root_path + '/dist/styles/', filename)
+    return send_from_directory(app.root_path + '/dist/styles/',
+                               filename)
 
 
 @app.route('/images/<path:filename>')
 def images(filename):
-    return send_from_directory(app.root_path + '/dist/images/', filename)
+    return send_from_directory(app.root_path + '/dist/images/',
+                               filename)
 
 
 @app.route('/data/<path:filename>.topojson')
 def geojson(filename):
-    return send_from_directory(app.root_path + '/app/data/', filename + '.topojson', mimetype="application/json")
+    return send_from_directory(app.root_path + '/app/data/',
+                               filename + '.topojson',
+                               mimetype="application/json")
 
 
 @app.route('/data/<path:filename>')

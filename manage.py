@@ -7,7 +7,9 @@ from taarifa_api import add_document, delete_documents
 from taarifa_schools import app
 from taarifa_schools.schemas import facility_schema, service_schema
 
+
 manager = Manager(app)
+
 
 def check(response, success=201, print_status=True):
     data, _, _, status = response
@@ -19,6 +21,7 @@ def check(response, success=201, print_status=True):
     print "Failed with status", status
     pprint(data)
     return False
+
 
 @manager.command
 def create_facility():
