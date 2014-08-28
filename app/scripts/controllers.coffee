@@ -72,3 +72,10 @@ angular.module('taarifaApp')
         map.addPOI(results._items)
         map.zoomToMarkers() unless nozoom
     $scope.updateMap()
+
+  .controller 'DashboardCtrl', ($scope) ->
+    $scope.dashGroups =
+      national:
+        active: true
+      regional:
+        active: false

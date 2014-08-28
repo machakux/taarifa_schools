@@ -20,6 +20,9 @@ app = angular
         templateUrl: 'views/main.html'
         controller: 'MainCtrl'
         reloadOnSearch: false
+      .when '/dashboard',
+        templateUrl: 'views/dashboard.html'
+        controller: 'DashboardCtrl'
       .otherwise
         redirectTo: '/'
     $httpProvider.defaults.headers.patch =
