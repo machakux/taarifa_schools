@@ -65,6 +65,7 @@ angular.module('taarifaApp')
           region: 1
           district: 1
           ward: 1
+          location: 1
         strip: 1
       , (results) ->
         if results._items.length == 0
