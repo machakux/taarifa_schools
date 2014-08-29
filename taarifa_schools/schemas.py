@@ -72,7 +72,6 @@ school_schema = {
     'examination_year': {
         'type': 'integer',
         'label': 'Percentage pass year',
-        'min': 1900,
         'max': 9999,
     },
     'school_type': {
@@ -90,6 +89,10 @@ school_schema = {
     'recording_date': {
         'type': 'datetime',
         'label': 'Date recorded',
+    },
+    'midterm_parents_meeting': {
+        'type': 'boolean',
+        'label': 'Midterm parents meeting',
     },
 }
 
