@@ -111,7 +111,6 @@ angular.module('taarifaApp')
       return Resource
 
   .factory 'MainResource', (ApiResource) ->
-    # FIXME: Hardcoded endpoint
     ApiResource 'schools'
 
   .factory 'Facility', (ApiResource) ->
@@ -216,7 +215,7 @@ angular.module('taarifaApp')
           else
             v
 
-        header = '<h5>poi.name</h5>'
+        header = '<h5>' + poi.name + '</h5>'
 
         # FIXME: can't this be offloaded to angular somehow?
         fields = _.keys(poi).sort().map((k) ->

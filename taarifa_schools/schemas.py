@@ -1,16 +1,16 @@
 # Resource schema
-school_schema = {
+resource_schema = {
     'object_id': {
         'type': 'integer',
         'label': 'Object ID',
     },
-    'code': {
-        'type': 'string',
-        'label': 'School code',
-    },
     'name': {
         'type': 'string',
         'label': 'School Name',
+    },
+    'code': {
+        'type': 'string',
+        'label': 'School code',
     },
     'region': {
         'type': 'string',
@@ -32,10 +32,6 @@ school_schema = {
         'type': 'string',
         'label': 'Ward',
     },
-    'ward_code': {
-        'type': 'string',
-        'label': 'Ward code',
-    },
     'village': {
         'type': 'string',
         'label': 'Village',
@@ -44,8 +40,17 @@ school_schema = {
         'type': 'string',
         'label': 'Subvillage',
     },
+    'latitude': {
+        'type': 'float',
+        'label': 'Latitude',
+    },
+    'longitude': {
+        'type': 'float',
+        'label': 'Longitude',
+    },
     'location': {
         'type': 'point',
+        'label': 'Location',
     },
     'district_rank': {
         'type': 'integer',
@@ -60,7 +65,7 @@ school_schema = {
         'label': 'National rank',
     },
     'percentage_pass': {
-        'type': 'integer',
+        'type': 'float',
         'label': 'Percentage pass',
         'min': 0,
         'max': 100,
@@ -72,11 +77,8 @@ school_schema = {
     'examination_year': {
         'type': 'integer',
         'label': 'Percentage pass year',
+        'min': 1900,
         'max': 9999,
-    },
-    'school_type': {
-        'type': 'string',
-        'label': 'School type',
     },
     'students_number': {
         'type': 'integer',
@@ -86,9 +88,25 @@ school_schema = {
         'type': 'integer',
         'label': 'Number of teachers',
     },
+    'school_type': {
+        'type': 'string',
+        'label': 'School type',
+    },
+    'tution_fee': {
+        'type': 'integer',
+        'label': 'Tution fee',
+    },
     'recording_date': {
         'type': 'datetime',
         'label': 'Date recorded',
+    },
+    'photo': {
+        'type': 'string',
+        'label': 'Photo',
+    },
+    'construction_year': {
+        'type': 'integer',
+        'label': 'Contruction year',
     },
     'midterm_parents_meeting': {
         'type': 'boolean',
@@ -100,7 +118,7 @@ school_schema = {
 facility_schema = {
     'facility_code': 'scf001',
     'facility_name': 'Schools',
-    'fields': school_schema,
+    'fields': resource_schema,
     'description': 'Schools infrastructure in Tanzania',
     'keywords': ['location', 'education', 'infrastructure'],
     'group': "education",
@@ -116,4 +134,3 @@ service_schema = {
     "group": "education",
     "service_code": "scs001"
 }
-

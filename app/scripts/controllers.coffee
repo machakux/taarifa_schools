@@ -1,7 +1,5 @@
 'use strict'
 
-resource_prefix = '/api/schools/'
-
 angular.module('taarifaApp')
 
   .controller 'NavCtrl', ($scope, $location) ->
@@ -62,8 +60,11 @@ angular.module('taarifaApp')
         where: where
         projection:
           _id: 1
+          name: 1
+          type: 1
+          region: 1
           district: 1
-          location: 1
+          ward: 1
         strip: 1
       , (results) ->
         if results._items.length == 0

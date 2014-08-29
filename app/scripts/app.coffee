@@ -34,8 +34,8 @@ app = angular
       return s.toString().toLowerCase().replace( /\b([a-z])/g, (ch) -> return ch.toUpperCase()))
 
   .run ($rootScope, flash) ->
-    $rootScope.resourceEndpoint = 'waterpoints'
-    $rootScope.resourceBaseURI = '/api/waterpoints/'
+    $rootScope.resourceEndpoint = 'schools'
+    $rootScope.resourceBaseURI = '/api/schools/'
     $rootScope.$on '$locationChangeSuccess', ->
       # Clear all flash messages on route change
       flash.info = ''
