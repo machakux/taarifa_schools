@@ -31,7 +31,7 @@ angular.module('taarifaApp')
   .controller 'MainCtrl', ($scope, $http, $location, MainResource, Map, flash, gettext) ->
     map = Map "poiMap", showScale:true
     $scope.where = $location.search()
-    $scope.where.max_results = parseInt($scope.where.max_results) || 100
+    $scope.where.max_results = parseInt($scope.where.max_results) || 100000
     $http.get($scope.resourceBaseURI + 'values/region', cache: true).success (regions) ->
       $scope.regions = regions
     $http.get($scope.resourceBaseURI + 'values/lga', cache: true).success (lgas) ->
