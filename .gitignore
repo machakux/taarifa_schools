@@ -54,3 +54,6 @@ app/bower_components
 *.swp
 *.swo
 .ropeproject
+
+# Heroku
+.env
