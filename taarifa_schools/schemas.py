@@ -16,29 +16,9 @@ resource_schema = {
         'type': 'string',
         'label': 'Region',
     },
-    'region_code': {
-        'type': 'integer',
-        'label': 'Region Code',
-    },
     'district': {
         'type': 'string',
         'label': 'District',
-    },
-    'district_code': {
-        'type': 'integer',
-        'label': 'District code',
-    },
-    'ward': {
-        'type': 'string',
-        'label': 'Ward',
-    },
-    'village': {
-        'type': 'string',
-        'label': 'Village',
-    },
-    'subvillage': {
-        'type': 'string',
-        'label': 'Subvillage',
     },
     'latitude': {
         'type': 'float',
@@ -52,65 +32,53 @@ resource_schema = {
         'type': 'point',
         'label': 'Location',
     },
-    'district_rank': {
-        'type': 'integer',
-        'label': 'District rank',
-    },
-    'regional_rank': {
-        'type': 'integer',
-        'label': 'Regional rank',
-    },
     'national_rank': {
         'type': 'integer',
         'label': 'National rank',
     },
-    'percentage_pass': {
-        'type': 'float',
-        'label': 'Percentage pass',
-        'min': 0,
-        'max': 100,
-    },
-    'candidates_number': {
+    'national_rank_last': {
         'type': 'integer',
-        'label': 'Number of candidates',
+        'label': 'National rank last year',
     },
-    'examination_year': {
+    'national_rank_before_last': {
         'type': 'integer',
-        'label': 'Percentage pass year',
-        'min': 1900,
-        'max': 9999,
+        'label': 'National rank year before last year',
     },
-    'students_number': {
+    'candidates': {
         'type': 'integer',
-        'label': 'Number of students',
+        'label': 'Candidates number',
     },
-    'teachers_number': {
+    'candidates_before_last': {
         'type': 'integer',
-        'label': 'Number of teachers',
+        'label': 'Candidates last year',
+    },
+    'candidates_last': {
+        'type': 'integer',
+        'label': 'Candidatesyear before last year',
+    },
+    'number_pass': {
+        'type': 'integer',
+        'label': 'Passed candidates',
+    },
+    'number_pass_last': {
+        'type': 'integer',
+        'label': 'Passed candidates last year',
+    },
+    'number_pass_before_last': {
+        'type': 'integer',
+        'label': 'Passed candidates year before last year',
     },
     'school_type': {
         'type': 'string',
         'label': 'School type',
     },
-    'tution_fee': {
-        'type': 'integer',
-        'label': 'Tution fee',
+    'ownership': {
+        'type': 'string',
+        'label': 'Ownership',
     },
     'recording_date': {
         'type': 'datetime',
         'label': 'Date recorded',
-    },
-    'photo': {
-        'type': 'string',
-        'label': 'Photo',
-    },
-    'construction_year': {
-        'type': 'integer',
-        'label': 'Contruction year',
-    },
-    'midterm_parents_meeting': {
-        'type': 'boolean',
-        'label': 'Midterm parents meeting',
     },
 }
 

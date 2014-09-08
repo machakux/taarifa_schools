@@ -2,6 +2,43 @@
 
 angular.module('taarifaApp')
 
+ .factory 'resourceStats', ($http, $q, populationData) ->
+    result = {}
+
+    getStats = (region, district, groupfield, cache) ->
+      def = $q.defer()
+      url = "/api/schools/performance/" + groupfield
+      filterFields = {"region":region, "district":district}
+      filters = []
+
+      _.keys(filterFields).forEach((x) ->
+        if filterFields[x] then filters.push(x + "=" + filterFields[x]))
+
+      filter = filters.join("&")
+
+      if filter then url += "?" + filter
+
+      # FIXME: use $cacheFactory to cache also the processed data
+      $http.get(url, cache: cache)
+        .success (data, status, headers, config) ->
+          geoField = _.contains(['region','district'], groupfield)
+          data.forEach((x) ->
+            f = _.find(x.numberPass)
+            x.perPass = (x.numberPass / x.candidates * 100).toFixed(2)
+            x.perPassLast = (x.numberPassLast / x.candidatesLast * 100).toFixed(2)
+            x.perPassBeforeLast = (x.numberPassBeforeLast / x.candidatesBeforeLast * 100).toFixed(2)
+            x.perChange = x.perPass - x.perPassLast
+            # all done, call the callback
+            def.resolve(data)
+          )
+
+      return def.promise
+
+    result.getStats = getStats
+
+    return result
+
+
   .factory 'modalSpinner', ($modal, $timeout) ->
     modalDlg = null
 
@@ -30,6 +67,52 @@ angular.module('taarifaApp')
     res =
         open: openSpinner
         close: closeSpinner
+
+  .factory 'populationData', ($http, $q) ->
+    def = $q.defer()
+    url = '/data/population_novillages.json'
+    result = {}
+
+    $http.get(url).then((data) ->
+      #allGrouped = _.groupBy(data.data,"Region")
+      #_.keys(grouped).forEach((r) ->
+      #  grouped[r] = _.groupBy(grouped[r],"District")
+      #  _.keys(grouped[r]).forEach((d) ->
+      #    grouped[r][d] = _.groupBy(grouped[r][d],"Ward")))
+
+      # create 3 indices on the data for convenience
+      # we can do this since all names happen to be unique
+      # FIXME: eventually should be delegated to a database
+      regionGroups = _.groupBy(data.data, "Region")
+      districtGroups = _.groupBy(data.data, "District")
+      wardGroups = _.groupBy(data.data, "Ward")
+
+      lookup = (r,d,w) ->
+        try
+          if w
+            wardGroups[w][0].Both_Sexes
+          else if d
+            districtGroups[d].filter((d) ->
+              d.Ward == "")[0].Both_Sexes
+          else if r
+            regionGroups[r].filter((d) ->
+              !d.District)[0].Both_Sexes
+          else
+            d3.sum(_.chain(regionGroups)
+              .values(regionGroups)
+              .flatten()
+              .filter((d) ->
+                !d.District)
+              .pluck("Both_Sexes")
+              .value())
+        catch e
+          return -1
+
+      result.lookup = lookup
+
+      def.resolve(result))
+
+    return def.promise
 
   .factory 'populationData', ($http, $q) ->
     def = $q.defer()

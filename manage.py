@@ -92,8 +92,9 @@ def upload_resources(filename, skip=0, limit=None):
             do_print = actual_index % print_every == 0
             try:
                 d = dict((k, convert.get(k, str)(v)) for k, v in d.items() if v)
-                coords = [d.pop('longitude'), d.pop('latitude')]
-                d['location'] = {'type': 'Point', 'coordinates': coords}
+                coords = [d.pop('longitude', None), d.pop('latitude', None)]
+                if coords[0] and coords[1]:
+                    d['location'] = {'type': 'Point', 'coordinates': coords}
                 d['facility_code'] = facility_code
                 if not check(add_document(facility_schema['endpoint'], d), 201, False):
                     raise Exception()

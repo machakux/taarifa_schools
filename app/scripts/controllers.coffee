@@ -79,5 +79,7 @@ angular.module('taarifaApp')
     $scope.dashGroups =
       national:
         active: true
-      regional:
+      primary:
+        active: false
+      secondary:
         active: false

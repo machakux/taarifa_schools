@@ -1,6 +1,6 @@
 angular.module('taarifaApp')
 
-  .controller 'DashMapCtrl', ($scope, $http, $q, $timeout, modalSpinner, waterpointStats, Waterpoint) ->
+  .controller 'DashMapCtrl', ($scope, $http, $q, $timeout, modalSpinner, resourceStats, MainResource) ->
 
     $scope.hoverText = ""
     $scope.choroChoice = "percFun"
@@ -27,7 +27,7 @@ angular.module('taarifaApp')
       else
         return ["ward", getWardItem(feature)[1]]
 
-    initMap = (regions, wards, waterpoints) ->
+    initMap = (regions, wards, resources) ->
 
       osmLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attribution: '(c) OpenStreetMap'
@@ -127,7 +127,7 @@ angular.module('taarifaApp')
       clusterLayer = new PruneClusterForLeaflet()
       clusterLayer.Cluster.Size = 100
 
-      waterpoints.forEach((x) ->
+      resources.forEach((x) ->
         coords = x.location.coordinates
         m = new PruneCluster.Marker(coords[1], coords[0])
         m.category = categoryMap[x.status_group]
@@ -202,15 +202,15 @@ angular.module('taarifaApp')
       )
 
 
-    modalSpinner.open()
+    # modalSpinner.open()
 
     # get the boundaries
     $q.all([
       $http.get("data/tanzania_regions.geojson", cache: true)
       $http.get("data/tanzania_wards.geojson", cache: true)
-      waterpointStats.getStats(null, null, null, "region", true)
+      resourceStats.getStats(null, null, "region", true)
       # FIXME: relies on the fact that wards are uniquely named
-      waterpointStats.getStats(null, null, null, "ward", true)
+      resourceStats.getStats(null, null, "district", true)
     ]).then((results) ->
       regions = results[0].data
       wards = results[1].data
@@ -228,5 +228,5 @@ angular.module('taarifaApp')
 
       initMap(regions, wards, [])
 
-      modalSpinner.close()
+      # modalSpinner.close()
     )

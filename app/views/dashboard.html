@@ -1,15 +1,253 @@
 <div style="text-align:right">
-  <button class="btn btn-success btn-sm" disabled>
-    <span class="glyphicon glyphicon-cloud-download"></span> {{"Publish"|translate}}</a>
   <button type="submit" class="btn btn-success btn-sm" onclick="window.print();">
     <span class="glyphicon glyphicon-print"></span> {{"Print"|translate}}</button>
 </div>
 
 <tabset>
-  <tab heading="{{'National'|translate}}">
-  </tab>
+    <tab heading="{{'National'|translate}}" ng-controller="NationalDashboardCtrl" active="dashTabs.national.active" select="refreshView()">
+        <div class="row">
+            
+            <div gridster="gridsterOpts">
+                <ul>
+                    
+                    <li gridster-item="item" ng-repeat="item in gridLayout.tiles">
+                        <div class="tile-header">{{tiles[$index][0] || 'unknown' | translate | titlecase}}</div>
+                        <small translate>Percentage pass</small><br />
+                        <span class="tile-number">{{tiles[$index][1].percent | number:2 }} %</span><br />
+                        <div>
+                            <small translate>Previous year</small>:
+                            <span class="tile-info">{{tiles[$index][1].percentLast| number:2 }} %</span>
+                        </div>
+                        <div>
+                            <small translate>Change</small>:
+                            <span class="tile-info">{{tiles[$index][1].passChange | number:2 }} %</span>                        
+                        </div>
+                    </li>
+                    
+                    <li gridster-item="gridLayout.count" class="problemsTile">
+                        <div class="tile-header" translate>Number of schools</div>
+                        <div id="typeCountDonutChart"></div>
+                    </li>
 
-  <!-- FIXME: controller does not belong here. Adopt: https://stackoverflow.com/a/21019370 -->
-  <tab heading="{{'Regional'|translate}}">
-  </tab>
+                    <li gridster-item row="gridLayout.map.row" col="gridLayout.map.col" size-x="gridLayout.map.sizeX" size-y="gridLayout.map.sizeY">
+                        <div ng-controller="DashMapCtrl">
+                            <div class="region-info">{{ hoverText }}</div>
+                            <div id="nationalDashMap"></div>
+                            <div id="choroplethSelect" class="btn-group map-control">
+                                <label class="btn btn-success" ng-model="choroChoice" btn-radio="'percFun'" uncheckable translate>Primary</label>
+                                <label class="btn btn-success" ng-model="choroChoice" btn-radio="'popReach'" uncheckable translate>Secondary</label>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li gridster-item="item" ng-repeat="item in gridLayout.plots" class="gridster-item-chart">
+                        <div class="panel panel-default plot">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{plots[$index].title | translate}}</h3>
+                            </div>
+                            
+                            <div class="panel-body" id="{{plots[$index].id}}">
+                            </div>
+                        </div>
+                    </li>
+
+                    <li gridster-item="gridLayout.topPrimary">
+                        <strong translate>Top Primary schools</strong>
+                        <div class="table-responsive" style="max-height: 95%; overflow-y: auto">
+                            <table class="table table-hover table table-striped table-info">
+                                <thead>
+                                    <tr class="success">
+                                        <th translate>Rank</th>
+                                        <th class="text-justify" translate>School name</th>
+                                        <th class="text-justify" translate>Region</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="school in topSchoolsPrimary" class="">
+                                        <td>{{ school.national_rank }}</td>
+                                        <td class="text-justify"><small>{{ school.name }}</small></td>
+                                        <td class="text-justify"><small>{{ school.region }}</small></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li gridster-item="gridLayout.topSecondary">
+                        <strong translate>Top Secondary schools</strong>
+                        <div class="table-responsive" style="max-height: 95%; overflow-y: auto">
+                            <table class="table table-hover table table-striped table-info">
+                                <thead>
+                                    <tr class="success">
+                                        <th translate>Rank</th>
+                                        <th class="text-justify" translate>School name</th>
+                                        <th class="text-justify" translate>Region</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="school in topSchoolsSecondary" class="">
+                                        <td>{{ school.national_rank }}</td>
+                                        <td class="text-justify"><small>{{ school.name }}</small></td>
+                                        <td class="text-justify"><small>{{ school.region }}</small></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </tab>
+
+    <!-- FIXME: controller does not belong here. Adopt: https://stackoverflow.com/a/21019370 -->
+    <tab heading="{{'Primary'|translate}}" select="initView()" ng-controller="PrimaryDashboardCtrl" active="dashTabs.primary.active">
+        <div class="row">
+              <div id="" class="">
+                <form class="form-inline" role="form" style="padding: 10px">
+                  <div class="form-group">
+                      <label for="regionSelectPrimary" translate>Region</label>:
+                      <select id="regionSelectPrimary" ng-model="region" ng-options="v for v in regions"
+                        ng-change="refreshView()" class="form-control">
+                      </select>
+                  </div>
+                </form>
+              </div>
+        </div>
+        
+        <div class="row">
+            <div gridster="gridsterOpts">
+                <ul>
+                    <li gridster-item="gridLayout.tiles[0]">
+                        <div class="tile-header" translate>Percentage Pass</div>
+                        <div><small translate>(Percentage)</small></div>
+                        <div class="tile-number">{{ percentagePass['this']|number:2 }} %</div>
+                        <div><small translate>Change from previous year</small></div>
+                        <div>{{ percentagePass['change']|number:2 }} %</div>
+                    </li>
+                    <li gridster-item="gridLayout.tiles[1]">
+                        <div class="tile-header" translate>Percentage Pass previuos year</div>
+                        <div><small translate>(Percentage)</small></div>
+                        <div class="tile-number">{{ percentagePass['last']|number:2 }} %</div>
+                        <div><small translate>Change from previous year</small></div>
+                        <div>{{ percentagePass['changeLast']|number:2 }} %</div>
+                    </li>
+                    
+                    <li gridster-item row="gridLayout.map.row" col="gridLayout.map.col" size-x="gridLayout.map.sizeX"
+                            size-y="gridLayout.map.sizeY">
+                    </li>
+
+                    
+                    <li gridster-item="gridLayout.top">
+                        <strong>Top schools</strong>
+                        <div class="table-responsive" style="max-height: 95%; overflow-y: auto">
+                            <table class="table table-hover table table-striped table-info">
+                                <thead>
+                                    <tr class="success">
+                                        <th translate>Position</th>
+                                        <th class="text-justify" translate>School name</th>
+                                        <th class="text-right" translate><small>National rank</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="school in topSchools" class="">
+                                        <td>{{$index+1}}</td>
+                                        <td class="text-justify"><small>{{ school.name }}</small></td>
+                                        <td class="text-right">{{school.national_rank}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    
+                    <li gridster-item="item" ng-repeat="item in gridLayout.plots" class="gridster-item-chart" >
+                        <div class="panel panel-default plot">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{plots[$index].title | translate}}</h3>
+                            </div>
+                            
+                            <div class="panel-body" id="{{plots[$index].id}}">
+                            </div>
+                        </div>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </tab>
+
+    <!-- FIXME: controller does not belong here. Adopt: https://stackoverflow.com/a/21019370 -->
+    <tab heading="{{'Secondary'|translate}}" select="initView()" ng-controller="SecondaryDashboardCtrl" active="dashTabs.secondary.active">
+        <div class="row">
+              <div id="" class="">
+                <form class="form-inline" role="form" style="padding: 10px">
+                  <div class="form-group">
+                      <label for="regionSelectPrimary" translate>Region</label>:
+                      <select id="regionSelectPrimary" ng-model="region" ng-options="v for v in regions"
+                        ng-change="refreshView()" class="form-control">
+                      </select>
+                  </div>
+                </form>
+              </div>
+        </div>
+        
+        <div class="row">
+            <div gridster="gridsterOpts">
+                <ul>
+                    <li gridster-item="gridLayout.tiles[0]">
+                        <div class="tile-header" translate>Percentage Pass</div>
+                        <div><small translate>(Percentage)</small></div>
+                        <div class="tile-number">{{ percentagePass['this']|number:2 }} %</div>
+                        <div><small translate>Change from previous year</small></div>
+                        <div>{{ percentagePass['change']|number:2 }} %</div>
+                    </li>
+                    <li gridster-item="gridLayout.tiles[1]">
+                        <div class="tile-header" translate>Percentage Pass previuos year</div>
+                        <div><small translate>(Percentage)</small></div>
+                        <div class="tile-number">{{ percentagePass['last']|number:2 }} %</div>
+                        <div><small translate>Change from previous year</small></div>
+                        <div>{{ percentagePass['changeLast']|number:2 }} %</div>
+                    </li>
+                    
+                    <li gridster-item row="gridLayout.map.row" col="gridLayout.map.col" size-x="gridLayout.map.sizeX"
+                            size-y="gridLayout.map.sizeY">
+                    </li>
+
+                    
+                    <li gridster-item="gridLayout.top">
+                        <strong>Top schools</strong>
+                        <div class="table-responsive" style="max-height: 95%; overflow-y: auto">
+                            <table class="table table-hover table table-striped table-info">
+                                <thead>
+                                    <tr class="success">
+                                        <th translate>Position</th>
+                                        <th class="text-justify" translate>School name</th>
+                                        <th class="text-right" translate><small>National rank</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="school in topSchools" class="">
+                                        <td>{{$index+1}}</td>
+                                        <td class="text-justify"><small>{{ school.name }}</small></td>
+                                        <td class="text-right">{{school.national_rank}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    
+                    <li gridster-item="item" ng-repeat="item in gridLayout.plots" class="gridster-item-chart" >
+                        <div class="panel panel-default plot">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{plots[$index].title | translate}}</h3>
+                            </div>
+                            
+                            <div class="panel-body" id="{{plots[$index].id}}">
+                            </div>
+                        </div>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </tab>
+
 </tabset>

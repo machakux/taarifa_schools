@@ -100,6 +100,87 @@ def resource_stats(field, group):
         ])['result'],))
 
 
+@app.route(RESOURCE_URL + 'performance')
+def performance_total():
+    """
+    Return total performance stats.
+    """
+    # FIXME: Direct call to the PyMongo driver, should be abstracted
+    # TODO: Provide generic implementation to allow more dynamic grouping
+    resources = app.data.driver.db['resources']
+    return send_response('resources', (
+        resources.aggregate([
+            {
+                "$match": dict(request.args.items())
+            },
+            {
+                "$group": {
+                    "_id": '$school_type' ,
+                    "numberPass": {'$sum': '$number_pass'},
+                    "numberPassLast": {'$sum': '$number_pass_last'},
+                    "numberPassBeforeLast": {'$sum': '$number_pass_before_last'},
+                    "candidates": {'$sum': '$candidates'},
+                    "candidatesLast": {'$sum': '$candidates_last'},
+                    "candidatesBeforeLast": {'$sum': '$candidates_before_last'}
+                }
+            },
+            {
+                "$project": {
+                      "_id": 0,
+                      "school_type": "$_id",
+                      "numberPass": 1,
+                      "numberPassLast": 1,
+                      "numberPassBeforeLast": 1,
+                      "candidates": 1,
+                      "candidatesLast": 1,
+                      "candidatesBeforeLast": 1,
+                }
+            },
+            {"$sort": {"numberPass": 1}}
+        ])['result'],))
+
+
+@app.route(RESOURCE_URL + 'performance/<group>')
+def performance_stats(group):
+    """
+    Return performance stats.
+    """
+    # FIXME: Direct call to the PyMongo driver, should be abstracted
+    # TODO: Provide generic implementation to allow more dynamic grouping
+    resources = app.data.driver.db['resources']
+    return send_response('resources', (
+        resources.aggregate([
+            {
+                "$match": dict(request.args.items())
+            },
+            {
+                "$group": {
+                    "_id": '$' + group,
+                    "numberPass": {'$sum': '$number_pass'},
+                    "numberPassLast": {'$sum': '$number_pass_last'},
+                    "numberPassBeforeLast": {'$sum': '$number_pass_before_last'},
+                    "candidates": {'$sum': '$candidates'},
+                    "candidatesLast": {'$sum': '$candidates_last'},
+                    "candidatesBeforeLast": {'$sum': '$candidates_before_last'},
+        
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    group: "$_id",
+                    "numberPass": 1,
+                    "numberPassLast": 1,
+                    "numberPassBeforeLast": 1,
+                    "candidates": 1,
+                    "candidatesLast": 1,
+                    "candidatesBeforeLast": 1,
+                }
+            },
+            {"$sort": {group: 1}}
+        ])['result'],))
+
+
 @app.route('/scripts/<path:filename>')
 def scripts(filename):
     return send_from_directory(app.root_path + '/dist/scripts/',
