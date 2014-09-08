@@ -161,10 +161,11 @@ angular.module('taarifaApp')
       getTopSchools()
       
     drawPlots = () ->
-      graphPerformanceData($scope.performanceData)
-      plotMultiBarChart('#performanceChartSecondary', $scope.graphPerformance)
-      plotMultiBarHorizontalChart('#numberPassChartSecondary', $scope.graphNumberPass)
-      plotMultiBarHorizontalChart("#performanceChangeChartSecondary", $scope.graphPerformanceChange)
+      if $scope.performanceData
+        graphPerformanceData($scope.performanceData)
+        plotMultiBarChart('#performanceChartSecondary', $scope.graphPerformance)
+        plotMultiBarHorizontalChart('#numberPassChartSecondary', $scope.graphNumberPass)
+        plotMultiBarHorizontalChart("#performanceChangeChartSecondary", $scope.graphPerformanceChange)
 
     $scope.initView = () ->
       getRegions(getData)

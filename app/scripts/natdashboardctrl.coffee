@@ -95,9 +95,8 @@ angular.module('taarifaApp')
           $scope.typeCount = data.sort((a, b) ->
             return b.count - a.count
           )
-          $scope.typeCount = $scope.typeCount
-
-          # plotCountSummary("typeSumDonut", $scope.typeCount)
+          graphCountTypeData($scope.typeCount)
+          plotDonutChart('#typeCountDonutChart', $scope.graphTypeCount)
           # modalSpinner.close()
 
     getPerformanceSchoolType = () ->
@@ -137,7 +136,10 @@ angular.module('taarifaApp')
       $http.get($scope.resourceBaseURI + "performance/" + params, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.performanceData = data
-          drawPlots()
+          graphPerformanceData($scope.performanceData)
+          plotMultiBarChart('#performanceChart', $scope.graphPerformance)
+          plotMultiBarHorizontalChart('#numberPassChart', $scope.graphNumberPass)
+          plotMultiBarHorizontalChart("#performanceChangeChart", $scope.graphPerformanceChange)
 
     getTopSchools = () ->
       params_sec = 'where={"school_type":"secondary"}&max_results=20&sort=[("national_rank",1)]'
@@ -215,12 +217,14 @@ angular.module('taarifaApp')
       $scope.graphTypeCount = typeCount
 
     drawPlots = () ->
-      graphPerformanceData($scope.performanceData)
-      graphCountTypeData($scope.typeCount)
-      plotDonutChart('#typeCountDonutChart', $scope.graphTypeCount)
-      plotMultiBarChart('#performanceChart', $scope.graphPerformance)
-      plotMultiBarHorizontalChart('#numberPassChart', $scope.graphNumberPass)
-      plotMultiBarHorizontalChart("#performanceChangeChart", $scope.graphPerformanceChange)
+      if $scope.performanceData
+        graphPerformanceData($scope.performanceData)
+        plotMultiBarChart('#performanceChart', $scope.graphPerformance)
+        plotMultiBarHorizontalChart('#numberPassChart', $scope.graphNumberPass)
+        plotMultiBarHorizontalChart("#performanceChangeChart", $scope.graphPerformanceChange)
+      if $scope.typeCount
+        graphCountTypeData($scope.typeCount)
+        plotDonutChart('#typeCountDonutChart', $scope.graphTypeCount)
 
     $scope.drillDown = (fieldVal, fieldType, clearFilters) ->
       groupField = fieldType || $scope.params.group
