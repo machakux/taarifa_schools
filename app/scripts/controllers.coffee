@@ -34,24 +34,24 @@ angular.module('taarifaApp')
     $scope.where.max_results = parseInt($scope.where.max_results) || 100000
     $http.get($scope.resourceBaseURI + 'values/region', cache: true).success (regions) ->
       $scope.regions = regions
-    $http.get($scope.resourceBaseURI + 'values/lga', cache: true).success (lgas) ->
-      $scope.lgas = lgas
-    $scope.clearLGA = ->
-      $scope.where.lga = null
-      $location.search 'lga', null
+    $http.get($scope.resourceBaseURI + 'values/district', cache: true).success (districts) ->
+      $scope.districts = districts
+    $scope.clearDistrict = ->
+      $scope.where.district = null
+      $location.search 'district', null
     $scope.updateMap = (nozoom) ->
       $location.search($scope.where)
       where = {}
       if $scope.where.region
         where.region = $scope.where.region
-        # Filter LGAs based on selected Region
-        $http.get($scope.resourceBaseURI + 'values/lga', params: {region: where.region}, cache: true).success (lgas) ->
-          $scope.lgas = lgas
+        # Filter Districtss based on selected Region
+        $http.get($scope.resourceBaseURI + 'values/district', params: {region: where.region}, cache: true).success (districts) ->
+          $scope.districts = districts
       else
-        $http.get($scope.resourceBaseURI + 'values/lga', cache: true).success (lgas) ->
-            $scope.lgas = lgas
-      if $scope.where.lga
-        where.lga = $scope.where.lga
+        $http.get($scope.resourceBaseURI + 'values/district', cache: true).success (districts) ->
+            $scope.district = districts
+      if $scope.where.district
+        where.district = $scope.where.district
       query where, $scope.where.max_results, nozoom
     query = (where, max_results, nozoom) ->
       map.clearMarkers()
