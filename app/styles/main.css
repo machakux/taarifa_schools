@@ -272,3 +272,10 @@ div.region-info {
 .statusSelector label {
   padding-right: 15px;
 }
+.checkbox{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+label{
+    text-transform: capitalize;
+}

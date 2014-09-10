@@ -47,6 +47,19 @@
                             </div>
                             
                             <div class="panel-body" id="{{plots[$index].id}}">
+                                <div class="row">
+                                    <div class="col-sm-12 text-right">
+                                        <form class="form-inline" role="form">
+                                            <div class="checkbox inline-fields" ng-repeat="school_type in schoolTypes">
+                                                <label for="{{ school_type }}-choice">
+                                                    <input type="radio" id="{{ school_type }}-choice" ng-model="schoolTypeChoice"
+                                                            value="{{ school_type }}" ng-click="onSchoolTypeSelected($event)" name="school_type">
+                                                        {{ school_type }}
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </li>

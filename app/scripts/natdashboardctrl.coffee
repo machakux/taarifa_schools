@@ -62,6 +62,8 @@ angular.module('taarifaApp')
 
     $scope.groups = ['region', 'district']
     
+    $scope.schoolTypes = ['all', 'primary', 'secondary']
+    
     $scope.schoolTypeChoice = "all"
 
     # default group by to region
@@ -125,15 +127,12 @@ angular.module('taarifaApp')
 
           $scope.tiles = _.pairs(_.pick(schoolTypeMap, 'primary', 'secondary'))
           # modalSpinner.close()
-
-    $scope.groupBy = () ->
-      # the grouping field has changed, reset the selected status
-      $scope.schoolTypeChoice = "all"
-      drawPlots()
  
     getPerformance = () ->
-      params = $scope.params.group
-      $http.get($scope.resourceBaseURI + "performance/" + params, cache: cacheHttp)
+      url = $scope.resourceBaseURI + "performance/" + $scope.params.group
+      if $scope.schoolTypeChoice and $scope.schoolTypeChoice isnt 'all'
+          url += '?school_type=' + $scope.schoolTypeChoice
+      $http.get(url, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.performanceData = data
           graphPerformanceData($scope.performanceData)
@@ -215,6 +214,12 @@ angular.module('taarifaApp')
       )
 
       $scope.graphTypeCount = typeCount
+
+    $scope.onSchoolTypeSelected = (event) ->
+      schoolType = event.target.attributes.value.value
+      $scope.schoolTypeChoice = schoolType
+      getPerformance()
+
 
     drawPlots = () ->
       if $scope.performanceData
