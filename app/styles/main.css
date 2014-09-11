@@ -276,6 +276,7 @@ div.region-info {
     padding-left: 10px;
     padding-right: 10px;
 }
-label{
-    text-transform: capitalize;
+
+.bordered-right{
+    border-right: 1px solid #DDD;
 }

@@ -24,18 +24,96 @@
                         </div>
                     </li>
                     
-                    <li gridster-item="gridLayout.count" class="problemsTile">
+                    <li gridster-item="gridLayout.count">
                         <div class="tile-header" translate>Number of schools</div>
+                        <div class="text-left">
+                            <small>
+                                <span translate>Total</span>: {{ schoolsTotal }}<br>
+                                <span ng-repeat="school_type in typeCount">
+                                    <span translate class="text-capitalize">{{ school_type.school_type }}</span>: {{ school_type.count }}{{$last ? '' : ', '}}                            
+                                </span>
+
+                            </small>                        
+                        </div>
+
                         <div id="typeCountDonutChart"></div>
                     </li>
 
-                    <li gridster-item row="gridLayout.map.row" col="gridLayout.map.col" size-x="gridLayout.map.sizeX" size-y="gridLayout.map.sizeY">
-                        <div ng-controller="DashMapCtrl">
-                            <div class="region-info">{{ hoverText }}</div>
-                            <div id="nationalDashMap"></div>
-                            <div id="choroplethSelect" class="btn-group map-control">
-                                <label class="btn btn-success" ng-model="choroChoice" btn-radio="'percFun'" uncheckable translate>Primary</label>
-                                <label class="btn btn-success" ng-model="choroChoice" btn-radio="'popReach'" uncheckable translate>Secondary</label>
+                    <li gridster-item row="gridLayout.totals.row" col="gridLayout.totals.col" size-x="gridLayout.totals.sizeX" size-y="gridLayout.totals.sizeY">
+                        <div class="row">
+                            <div class="col-sm-6 bordered-right">
+                                <h4 translate>Primary</h4>
+                                <div>
+                                    <p><small translate>Number of candidates</small>: <strong>{{ tiles[0][1].candidates | number }}</strong></p>
+                                    <p><small translate>Number of passed candidates</small>: <strong>{{ tiles[0][1].numberPass | number }}</strong></p>
+                                    <hr>
+                                    <p>
+                                        <small translate>No. of school with more than 10% improvement</small><br>
+                                        <strong>{{ improvedThan.primary.count }}</strong>
+                                        <span class="text-muted">/ {{ improvedThan.primary.percent| number:2 }}%</span>
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <h4 translate>Secondary</h4>
+                                <div>
+                                    <p><small translate>Number of candidates</small>: <strong>{{ tiles[1][1].candidates | number }}</strong></p>
+                                    <p><small translate>Number of passed candidates</small>: <strong>{{ tiles[1][1].numberPass | number }}</strong></p>
+                                    <hr>
+                                    <p>
+                                        <small translate>No. of school with more than 10% improvement</small><br>
+                                        <strong>{{ improvedThan.secondary.count }}</strong>
+                                        <span class="text-muted">/ {{ improvedThan.secondary.percent| number:2 }}%</span>
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin: 10px">
+                            <div class="col-lg-12">
+                                <form role="from" class="form-inline">
+                                    <div class="form-group">
+                                        <small>
+                                            <label>Schools with </small></label>
+                                            <select id="passGoalCampratorSelect" class="form-control" ng-model="passGoalComparator"
+                                                    ng-options="item.label for item in numberComparators track by item.value" ng-change="onGoalUpdated(passGoalLimit, passGoalComparator)">
+                                            </select>
+                                            <select id="passGoalLimitSelect" class="form-control" ng-model="passGoalLimit"
+                                                    ng-options="item for item in passGoalLimits" ng-change="onGoalUpdated(passGoalLimit, passGoalComparator)">
+                                            </select>
+                                            % pass
+                                        </small>
+                                    </div>
+                                </form>
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 bordered-right">
+                                <div class="container-fluid">
+                                    <p class="tile-info"><strong>{{ reachedGoal.primary.percent | number:2}} %</strong></p>
+                                    <p>{{ reachedGoal.primary.count | number }} Schools</p>
+                                </div>
+                                <div class="container-fluid">
+                                    <hr>
+                                    <small>Last year</small>:
+                                    <strong><small>{{ reachedGoal.primaryLast.count | number }} Schools</small></strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="container-fluid">
+                                    <p class="tile-info"><strong>{{ reachedGoal.secondary.percent | number:2}} %</strong></p>
+                                    <p>{{ reachedGoal.secondary.count | number }} Schools</p>
+                                </div>
+                                
+                                <div class="container-fluid">
+                                    <hr>
+                                    <small>Last year</small>:
+                                    <strong><small>{{ reachedGoal.secondaryLast.count | number }} Schools</small></strong>
+                                </div>
                             </div>
                         </div>
                     </li>

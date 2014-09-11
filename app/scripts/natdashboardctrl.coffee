@@ -35,7 +35,7 @@ angular.module('taarifaApp')
         { sizeX: 3, sizeY: 2, row: 0, col: 3 },
       ]
 
-      map:
+      totals:
         { sizeX: 6, sizeY: 6, row: 0, col: 6 }
 
       count:
@@ -61,10 +61,17 @@ angular.module('taarifaApp')
       {id:"performanceChangeChart", title: gettext("Change in % pass")}]
 
     $scope.groups = ['region', 'district']
-    
     $scope.schoolTypes = ['all', 'primary', 'secondary']
-    
     $scope.schoolTypeChoice = "all"
+    $scope.numberComparators = [
+      {'value': '$gt', 'label': gettext('Greater than')},
+      {'value': '$lt', 'label': gettext('Less than')},
+      {'value': '$gte', 'label': gettext('Greater than or equal to')},
+      {'value': '$lte', 'label': gettext('Less than or equal to')}
+    ]
+    $scope.passGoalComparator = $scope.numberComparators[1]
+    $scope.passGoalLimits = (x for x in [0..100] by 10)
+    $scope.passGoalLimit = 60
 
     # default group by to region
     $scope.params = group: $scope.groups[0]
@@ -90,15 +97,87 @@ angular.module('taarifaApp')
                   district: $scope.params?.district
                   ward: $scope.params?.ward)
         .success (data, status, headers, config) ->
-          data.forEach( (x) ->
-            x.label = x.school_type
-            x.value = x.count
-          )
           $scope.typeCount = data.sort((a, b) ->
             return b.count - a.count
           )
           graphCountTypeData($scope.typeCount)
           plotDonutChart('#typeCountDonutChart', $scope.graphTypeCount)
+          # modalSpinner.close()
+
+    getCountImprovedThan = () ->
+      # modalSpinner.open()
+      $scope.improvedThan = {}
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': {
+                    "percentage_pass_change":{"$gte": 10},
+                    "school_type":"primary"})
+        .success (data, status, headers, config) ->
+          $scope.improvedThan.primary = data
+          $scope.improvedThan.primary.percent = ($scope.improvedThan.primary.count/$scope.typeCountIndexed.primary * 100)
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': {
+                    "percentage_pass_change":{"$gte": 10},
+                    "school_type":"secondary"})
+        .success (data, status, headers, config) ->
+          $scope.improvedThan.secondary = data
+          $scope.improvedThan.secondary.percent = ($scope.improvedThan.secondary.count/$scope.typeCountIndexed.secondary * 100)
+          # modalSpinner.close()
+
+    getCountByGoal = () ->
+      # modalSpinner.open()
+      $scope.reachedGoal = {}
+      comparator = $scope.passGoalComparator.value
+      whereSec = {}
+      whereSecLast = {}
+      wherePr = {}
+      wherePrLast = {}
+      
+      passQuery = {}
+      passQuery[comparator] = $scope.passGoalLimit
+      
+      whereSec['percentage_pass'] = passQuery
+      whereSec.school_type = 'secondary'
+     
+      whereSecLast['percentage_pass_last'] = passQuery
+      whereSecLast.school_type = 'secondary'
+      
+      wherePr['percentage_pass'] = passQuery
+      wherePr.school_type = 'primary'
+      
+      wherePrLast['percentage_pass_last'] = passQuery
+      wherePrLast.school_type = 'primary'
+
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': wherePr)
+        .success (data, status, headers, config) ->
+          $scope.reachedGoal.primary = data
+          $scope.reachedGoal.primary.percent = ($scope.reachedGoal.primary.count/$scope.typeCountIndexed.primary * 100)
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': whereSec)
+        .success (data, status, headers, config) ->
+          $scope.reachedGoal.secondary = data
+          $scope.reachedGoal.secondary.percent = ($scope.reachedGoal.secondary.count/$scope.typeCountIndexed.secondary * 100)
+
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': wherePrLast)
+        .success (data, status, headers, config) ->
+          $scope.reachedGoal.primaryLast = data
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': whereSecLast)
+        .success (data, status, headers, config) ->
+          $scope.reachedGoal.secondaryLast = data
           # modalSpinner.close()
 
     getPerformanceSchoolType = () ->
@@ -207,12 +286,16 @@ angular.module('taarifaApp')
 
     graphCountTypeData = (data) ->
       typeCount = []
-      
+      $scope.typeCountIndexed = {}
+      $scope.schoolsTotal = 0
       data.forEach( (item) ->
         typeObj = {x: item.school_type || '', y: item.count || 0}
         typeCount.push typeObj
+        $scope.typeCountIndexed[item.school_type || ''] = item.count || 0
+        $scope.schoolsTotal += typeObj.y
       )
-
+      getCountImprovedThan()
+      getCountByGoal()
       $scope.graphTypeCount = typeCount
 
     $scope.onSchoolTypeSelected = (event) ->
@@ -220,6 +303,13 @@ angular.module('taarifaApp')
       $scope.schoolTypeChoice = schoolType
       getPerformance()
 
+    $scope.onGoalUpdated = (limit, comparator) ->
+      console.log limit,comparator
+      if limit
+        $scope.passGoalLimit = limit
+      if comparator
+        $scope.passGoalComparator = comparator
+      getCountByGoal()
 
     drawPlots = () ->
       if $scope.performanceData

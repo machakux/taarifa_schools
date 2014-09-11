@@ -54,6 +54,23 @@ def resource_count(field):
         reduce="function(curr, result) {result.count++;}"),))
 
 
+@app.route(RESOURCE_URL + 'total_count')
+def resource_total_count():
+    """
+    Return number of resources matching a given query.
+    """
+    # FIXME: Direct call to the PyMongo driver, should be abstracted
+    resources = app.data.driver.db['resources']
+    query = dict(request.args.items())
+    if query.has_key('$where'):
+        try:
+            query = json.loads(query['$where'])
+        except:
+            pass
+    print query
+    return send_response('resources', ({'count': resources.find(query).count()},))
+
+
 @app.route(RESOURCE_URL + 'group_count/<field>/<group>')
 def resource_stats(field, group):
     """
