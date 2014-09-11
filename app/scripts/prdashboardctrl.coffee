@@ -74,7 +74,7 @@ angular.module('taarifaApp')
           $scope.percentagePass['changeLast'] = $scope.percentagePass['last'] - $scope.percentagePass['beforeLast']
 
     getTopSchools = () ->
-      params = 'where={"region":"' + $scope.region + '", "school_type":"primary"}&max_results=10&sort=[("national_rank",1)]'
+      params = 'where={"region":"' + $scope.region + '", "school_type":"primary"}&max_results=50&sort=[("national_rank",1)]'
       $http.get($scope.resourceBaseURI + "?" + params, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.topSchools = data._items

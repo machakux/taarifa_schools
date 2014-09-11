@@ -141,8 +141,8 @@ angular.module('taarifaApp')
           plotMultiBarHorizontalChart("#performanceChangeChart", $scope.graphPerformanceChange)
 
     getTopSchools = () ->
-      params_sec = 'where={"school_type":"secondary"}&max_results=20&sort=[("national_rank",1)]'
-      params_pr = 'where={"school_type":"primary"}&max_results=20&sort=[("national_rank",1)]'
+      params_sec = 'where={"school_type":"secondary"}&max_results=100&sort=[("national_rank",1)]'
+      params_pr = 'where={"school_type":"primary"}&max_results=100&sort=[("national_rank",1)]'
       $http.get($scope.resourceBaseURI + "?" + params_sec, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.topSchoolsSecondary = data._items
