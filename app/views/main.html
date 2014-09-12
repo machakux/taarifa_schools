@@ -1,30 +1,87 @@
-<div class="panel panel-default">
-  <div class="panel-heading"><h3 class="panel-title" translate>Filter map view</h3></div>
-  <div class="panel-body">
-    <form class="form-inline" role="form">
-      <div class="form-group">
-        <label for="region" translate>Region</label>
-        <select class="form-control" id="region" ng-model="where.region" ng-change="clearDistrict();updateMap()"
-          ng-options="r for r in regions">
-          <option value="">all</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="district" translate>District</label>
-        <select class="form-control" id="district" ng-model="where.district" ng-change="updateMap()"
-          ng-options="d for d in districts">
-          <option value="">all</option>
-        </select>
-      </div>
-      <div style="margin-left:20px" class="form-group">
-        <label for="maxResults" translate>Max no. results</label>
-        <select class="form-control" id="maxResults" ng-model="where.max_results" ng-change="updateMap()"
-          ng-options="k for k in [25, 50, 100, 200, 500, 1000]">
-          <option value="">all</option>
-        </select>
-      </div>
-    </form>
-  </div>
-</div>
+<div class="row">
 
-<div id="poiMap" style="height: 480px; width: 100%"></div>
+    <div class="col-sm-3">
+        <div class="left-panel">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title" translate>Filter</h3></div>
+                <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-lg-3" for="region"><small translate>Search</small></label>
+                        <div class="col-lg-9">
+                            <input type="search" class="form-control input-sm" ng-model="where.search" placeholder="Enter text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3" for="region"><small translate>Type</small></label>
+                        <div class="col-lg-9">
+                            <select class="form-control input-sm" id="type" ng-model="where.school_type" ng-change="updateMap()"
+                                    ng-options="type for type in schoolTypes">
+                                <option value="">all</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3" for="region"><small translate>Region</small></label>
+                        <div class="col-lg-9">
+                            <select class="form-control input-sm" id="region" ng-model="where.region" ng-change="clearDistrict();updateMap()"
+                                    ng-options="r for r in regions">
+                                <option value="">all</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3" for="district" translate><small translate>District</small></label>
+                        <div class="col-lg-9">
+                            <select class="form-control input-sm" id="district" ng-model="where.district" ng-change="updateMap()"
+                                ng-options="d for d in districts">
+                          <option value="">all</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3" for="maxResults" translate><small>Maximum</small></label>
+                        <div class="col-lg-9">
+                            <select class="form-control input-sm" id="maxResults" ng-model="where.max_results" ng-change="updateMap()"
+                                    ng-options="k for k in [25, 50, 100, 200, 500, 1000]">
+                                <option value="">all</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+              </div>
+            </div>
+            <div ng-repeat="result in results.slice(1,100)" class="results-item">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <div class="row">
+                                <div class="col-sm-9"><a>{{ result.name }}</a></div>
+                                <div class="col-sm-3"><a><small class="text-muted text-capfirst">{{ result.school_type }}</small></a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6 small">
+                                <span class="text-muted">Code</span>: {{ result.code }}<br>
+                                <span class="text-muted">National rank</span>: {{ result.national_rank }}<br>
+                                <span class="text-muted">Pass</span>: {{ result.percentage_pass | number }} %
+                            </div>
+                            <div class="col-sm-6 small">
+                                <span class="text-muted">Region</span>: {{ result.region }}<br>
+                                <span class="text-muted">District</span>: {{ result.district }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+    </div>
+        
+
+    <div class="col-sm-9">
+        <div id="poiMap"></div>
+    </div>
+</div>

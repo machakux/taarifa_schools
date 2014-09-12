@@ -4,7 +4,6 @@
 .form-control {
   padding: 3px;
 }
-
 .fade {
   display: none;
 }
@@ -40,7 +39,12 @@
 #map_canvas {
     height: 100%;
 }
-
+#poiMap{
+    display: block;
+    max-height: 100%;
+    width: 100%;
+    min-height: 700px;
+}
 /* Stacked bar chart */
 
 .axis path,
@@ -138,10 +142,6 @@ li.gridster-item {
 
 .tile-info {
     font-size: 20px;
-}
-
-.problemsTile {
-  text-align: left !important;
 }
 
 .dc-chart g.row text {
@@ -279,4 +279,11 @@ div.region-info {
 
 .bordered-right{
     border-right: 1px solid #DDD;
+}
+.left-panel{
+    height: 700px;
+    max-height: 100%;
+    overflow: auto;
+    display: block;
+    background: #FBFBFB
 }

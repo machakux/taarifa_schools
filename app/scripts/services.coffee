@@ -270,7 +270,7 @@ angular.module('taarifaApp')
 
       map = L.map id,
         center: new L.LatLng -6.3153, 35.15625
-        zoom: 5
+        zoom: 6
         fullscreenControl: true
         layers: defaultLayers
 
