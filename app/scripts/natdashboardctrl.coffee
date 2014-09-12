@@ -69,7 +69,7 @@ angular.module('taarifaApp')
       {'value': '$gte', 'label': gettext('Greater than or equal to')},
       {'value': '$lte', 'label': gettext('Less than or equal to')}
     ]
-    $scope.passGoalComparator = $scope.numberComparators[1]
+    $scope.passGoalComparator = $scope.numberComparators[2]
     $scope.passGoalLimits = (x for x in [0..100] by 10)
     $scope.passGoalLimit = 60
 
@@ -304,7 +304,6 @@ angular.module('taarifaApp')
       getPerformance()
 
     $scope.onGoalUpdated = (limit, comparator) ->
-      console.log limit,comparator
       if limit
         $scope.passGoalLimit = limit
       if comparator

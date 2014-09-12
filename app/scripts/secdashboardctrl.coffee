@@ -35,7 +35,7 @@ angular.module('taarifaApp')
           { sizeX: 3, sizeY: 2, row: 0, col: 3 },
       ],
 
-      map:
+      totals:
         { sizeX: 6, sizeY: 6, row: 0, col: 6 }
       top:
         { sizeX: 6, sizeY: 4, row: 2, col: 0 }
@@ -51,6 +51,16 @@ angular.module('taarifaApp')
       {id:"numberPassChartSecondary", title: gettext("Number of passed studets")},
       {id:"performanceChangeChartSecondary", title: gettext("Change in % pass from previous year")}
     ]
+
+    $scope.numberComparators = [
+      {'value': '$gt', 'label': gettext('Greater than')},
+      {'value': '$lt', 'label': gettext('Less than')},
+      {'value': '$gte', 'label': gettext('Greater than or equal to')},
+      {'value': '$lte', 'label': gettext('Less than or equal to')}
+    ]
+    $scope.passGoalComparator = $scope.numberComparators[2]
+    $scope.passGoalLimits = (x for x in [0..100] by 10)
+    $scope.passGoalLimit = 60
 
     # a flag to keep track if the plots should be redrawn
     # next time the tab is made visible
@@ -72,6 +82,78 @@ angular.module('taarifaApp')
           $scope.percentagePass['beforeLast'] = data[0].numberPassBeforeLast / data[0].candidatesBeforeLast * 100
           $scope.percentagePass['change'] = $scope.percentagePass['this'] - $scope.percentagePass['last']
           $scope.percentagePass['changeLast'] = $scope.percentagePass['last'] - $scope.percentagePass['beforeLast']
+          $scope.performanceTotal = data[0]
+
+    getSchoolsCount = () ->
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': {
+                    "school_type":"secondary",
+                    "region":$scope.region})
+        .success (data, status, headers, config) ->
+          $scope.schoolsCount = data.count
+          getCountImprovedThan()
+          getCountByGoal()
+
+    getCountImprovedThan = () ->
+      # modalSpinner.open()
+      $scope.improvedThan = {}
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': {
+                    "percentage_pass_change":{"$gte": 10},
+                    "school_type":"secondary",
+                    "region":$scope.region})
+        .success (data, status, headers, config) ->
+          $scope.improvedThan.current = data
+          $scope.improvedThan.current.percent = ($scope.improvedThan.current.count/$scope.schoolsCount * 100)
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': {
+                    "percentage_pass_change_last":{"$gte": 10},
+                    "school_type":"secondary",
+                    "region":$scope.region})
+        .success (data, status, headers, config) ->
+          $scope.improvedThan.last = data
+          # modalSpinner.close()
+
+    getCountByGoal = () ->
+      # modalSpinner.open()
+      $scope.reachedGoal = {}
+      comparator = $scope.passGoalComparator.value
+      whereSec = {}
+      whereSecLast = {}
+      
+      passQuery = {}
+      passQuery[comparator] = $scope.passGoalLimit
+      
+      whereSec['percentage_pass'] = passQuery
+      whereSec.school_type = 'secondary'
+      whereSec.region = $scope.region
+      
+      whereSecLast['percentage_pass_last'] = passQuery
+      whereSecLast.school_type = 'secondary'
+      whereSecLast.region = $scope.region
+
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': whereSec)
+        .success (data, status, headers, config) ->
+          $scope.reachedGoal = data
+          $scope.reachedGoal.percent = ($scope.reachedGoal.count/$scope.schoolsCount * 100)
+
+      $http.get($scope.resourceBaseURI + 'total_count',
+                cache: cacheHttp
+                params:
+                  '$where': whereSecLast)
+        .success (data, status, headers, config) ->
+          $scope.reachedGoal.last = data
+          # modalSpinner.close()
+
 
     getTopSchools = () ->
       params = 'where={"region":"' + $scope.region + '", "school_type":"secondary"}&max_results=50&sort=[("national_rank",1)]'
@@ -155,10 +237,18 @@ angular.module('taarifaApp')
       if val and plotsDirty
         drawPlots()
 
+    $scope.onGoalUpdated = (limit, comparator) ->
+      if limit
+        $scope.passGoalLimit = limit
+      if comparator
+        $scope.passGoalComparator = comparator
+      getCountByGoal()
+
     getData = () ->
       getPerformanceTotal()
       getPerformance()
       getTopSchools()
+      getSchoolsCount()
       
     drawPlots = () ->
       if $scope.performanceData
