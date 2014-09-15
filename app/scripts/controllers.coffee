@@ -60,6 +60,7 @@ angular.module('taarifaApp')
       map.clearMarkers()
       MainResource.query
         max_results: max_results
+        sort: """[("national_rank", 1)]"""
         where: where
         projection:
           _id: 1
@@ -79,6 +80,13 @@ angular.module('taarifaApp')
         $scope.results = results._items
         map.addPOI(results._items)
         map.zoomToMarkers() unless nozoom
+
+    $scope.openPopup = (markerId) ->
+      map.openPopup(markerId)
+
+    $scope.closePopup = (markerId) ->
+      map.closePopup(markerId)
+
     $scope.updateMap()
 
   .controller 'DashboardCtrl', ($scope) ->

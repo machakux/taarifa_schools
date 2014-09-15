@@ -232,13 +232,7 @@ angular.module('taarifaApp')
       overlays = {}
 
       if options.clustering
-        markerLayer = new PruneClusterForLeaflet()
-        markerLayer.Cluster.Size = 100
-        markerLayer.PrepareLeafletMarker = (leafletMarker, data) ->
-          if leafletMarker.getPopup()
-            leafletMarker.setPopupContent data
-          else
-            leafletMarker.bindPopup data
+        markerLayer = new L.MarkerClusterGroup();
       else
         markerLayer = L.featureGroup()
 
@@ -309,10 +303,22 @@ angular.module('taarifaApp')
 
         html = '<div class="popup">' + header + fields + '</div>'
 
+      @openPopup = (marker_id) ->
+        marker = window.markers[marker_id]
+        if marker?
+          if options.clustering
+            markerLayer.zoomToShowLayer marker, ->
+              marker.openPopup()
+          else
+            marker.openPopup()
+
+      @closePopup = (marker_id) ->
+        marker = window.markers[marker_id]
+        if marker?
+          marker.closePopup()
+
       @clearMarkers = () ->
         if options.clustering
-          markerLayer.RemoveMarkers()
-        else
           markerLayer.clearLayers()
 
       # FIXME: more hardcoded statusses
@@ -346,17 +352,15 @@ angular.module('taarifaApp')
               icon: makeAwesomeIcon(poi.status_group)
 
       @addPOI = (pois) ->
+        window.markers = {}
         pois.forEach (poi) ->
-          [lng,lat] = poi.location.coordinates
-
-          if options.clustering
-            m = new PruneCluster.Marker lat, lng, popup
-            markerLayer.RegisterMarker m
-          else
-            m = makeMarker(poi)
+          if poi.location?
+            [lng,lat] = poi.location.coordinates
             popup = makePopup(poi)
+            m = makeMarker(poi)
             m.bindPopup popup
             markerLayer.addLayer(m)
+            window.markers[poi._id] = m
 
         if options.coverage
           coords = pois.map (x) -> [x.location.coordinates[1], x.location.coordinates[0]]
@@ -364,12 +368,9 @@ angular.module('taarifaApp')
 
 
       @zoomToMarkers = () ->
-        if options.clustering
-          markerLayer.FitBounds()
-        else
-          bounds = markerLayer.getBounds()
-          if bounds.isValid()
-            map.fitBounds(bounds)
+        bounds = markerLayer.getBounds()
+        if bounds.isValid()
+          map.fitBounds(bounds)
 
       return this
 
