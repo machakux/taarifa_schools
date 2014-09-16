@@ -68,7 +68,7 @@ function plotMultiBarHorizontalChart(selector, data){
 
   nv.addGraph(function() {
     var chart = nv.models.multiBarHorizontalChart()
-        .showValues(true)           //Show bar value next to each bar.
+        .showValues(false)           //Show bar value next to each bar.
         .tooltips(true)             //Show tooltips on hover.
         .transitionDuration(350)
         .showControls(false);        //Allow user to switch between "Grouped" and "Stacked" mode.
