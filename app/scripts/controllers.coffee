@@ -40,6 +40,15 @@ angular.module('taarifaApp')
     $scope.clearDistrict = ->
       $scope.where.district = null
       $location.search 'district', null
+
+    $scope.resetParameters = ->
+      $scope.where = 
+        max_results: 100000
+      $http.get($scope.resourceBaseURI + 'values/region', cache: true).success (regions) ->
+        $scope.regions = regions
+      $http.get($scope.resourceBaseURI + 'values/district', cache: true).success (lgas) ->
+        $scope.districts = districts
+
     $scope.updateMap = (nozoom) ->
       $location.search($scope.where)
       where = {}
@@ -55,7 +64,15 @@ angular.module('taarifaApp')
         where.district = $scope.where.district
       if $scope.where.school_type
         where.school_type = $scope.where.school_type
+      if $scope.where.search
+        where.$text =
+          $search: '\"' + $scope.where.search + '\"'
       query where, $scope.where.max_results, nozoom
+
+    $scope.reset = ->
+      $scope.resetParameters()
+      $scope.updateMap()
+
     query = (where, max_results, nozoom) ->
       map.clearMarkers()
       MainResource.query
