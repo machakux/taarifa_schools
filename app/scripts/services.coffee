@@ -292,7 +292,7 @@ angular.module('taarifaApp')
           else
             v
 
-        header = '<h5>' + poi.name + '</h5>'
+        header = '<h5><a href="#/schools/' + poi._id + '">' + poi.name + '</a></h5>'
 
         # FIXME: can't this be offloaded to angular somehow?
         fields = _.keys(poi).sort().map((k) ->
@@ -371,6 +371,11 @@ angular.module('taarifaApp')
         bounds = markerLayer.getBounds()
         if bounds.isValid()
           map.fitBounds(bounds)
+
+      @centerToMarkers = (zoom) ->
+        @zoomToMarkers()
+        zoom = if zoom? and parseInt(zoom)? then parseInt(zoom) else 6
+        map.setZoom(zoom)
 
       return this
 

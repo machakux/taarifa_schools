@@ -114,3 +114,13 @@ angular.module('taarifaApp')
         active: false
       secondary:
         active: false
+
+  .controller 'SchoolCtrl', ($scope, $routeParams, Map, MainResource) ->
+    $scope.mainResource = MainResource
+    map = Map("mapView", {})
+    MainResource.get id: $routeParams.id, (resource) ->
+      $scope.resource = resource
+      map.clearMarkers()
+      map.addPOI([resource])
+      map.centerToMarkers()
+

@@ -23,6 +23,9 @@ app = angular
       .when '/dashboard',
         templateUrl: 'views/dashboard.html'
         controller: 'DashboardCtrl'
+      .when '/schools/:id',
+        templateUrl: 'views/school.html'
+        controller: 'SchoolCtrl'
       .otherwise
         redirectTo: '/'
     $httpProvider.defaults.headers.patch =

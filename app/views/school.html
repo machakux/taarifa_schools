@@ -1,0 +1,78 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="page-header">
+                <h1>{{ resource.name }}</h1>
+            </div>
+            
+            <div class="well">
+                <div style="font-size: 1.1em">
+                    <span translate class="text-muted">School code</span>: {{ resource.code }}
+                </div>
+            </div>
+            
+            <div class="container-fluid">
+                <div>
+                    <span translate>Region</span>: <strong>{{ resource.region }}</strong>
+                </div>
+                <div>
+                    <span translate>District</span>: <strong>{{ resource.district }}</strong>
+                </div>
+                <div>
+                    <span translate>National rank</span>: <strong>{{ resource.national_rank }}</strong>
+                </div>
+                <hr>
+                
+                <h4>
+                    <span class="text-muted" translate>School type</span>: <span class="text-capitalize">{{ resource.school_type }}</span>
+                </h4>
+                <hr>
+                
+                <div>
+                    <div class="text-muted text-right" translate>Peformance</div>
+                    <div>
+                        <span translate>National rank</span>: <strong>{{ resource.national_rank }}</strong>
+                    </div>
+                    <div>
+                        <span translate>Percentage pass</span>: <strong>{{ resource.percentage_pass| number:2 }} %</strong>
+                    </div>
+                    <div>
+                        <span translate>Total number of candidates</span>: <strong>{{ resource.candidates }}</strong>
+                    </div>
+                    <div>
+                        <span translate>Number of passed candidates</span>: <strong>{{ resource.number_pass }}</strong>
+                    </div>
+                    <div>
+                        <span translate>Change in percentage pass</span>: <strong>{{ resource.percentage_pass_change| number:2 }} %</strong>
+                    </div>                
+                </div>
+                <hr>
+                
+                <div>
+                    <div class="text-muted text-right" translate>Last year</div>
+                    <div>
+                        <span translate>National rank</span>: <strong>{{ resource.national_rank_last }}</strong>
+                    </div>
+                    <div>
+                        <span translate>Percentage pass</span>: <strong>{{ resource.percentage_pass_last| number:2 }} %</strong>
+                    </div>
+                    <div>
+                        <span translate>Total number of candidates</span>: <strong>{{ resource.candidates_last }}</strong>
+                    </div>
+                    <div>
+                        <span translate>Number of passed candidates</span>: <strong>{{ resource.number_pass_last }}</strong>
+                    </div>
+                    <div>
+                        <span translate>Change in percentage pass</span>: <strong>{{ resource.percentage_pass_change_last| number:2 }} %</strong>
+                    </div>                
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div id="mapView" style="height: 400px; width: 100%; display: block"></div>
+        </div>
+    </div>
+</div>
