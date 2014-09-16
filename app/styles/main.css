@@ -287,3 +287,7 @@ div.region-info {
     display: block;
     background: #FBFBFB
 }
+@media print 
+{
+    .no-print{display: none}
+}
