@@ -2,6 +2,8 @@ from pprint import pprint
 from datetime import datetime
 from csv import DictReader
 
+import pymongo
+
 from flask.ext.script import Manager
 
 from taarifa_api import add_document, delete_documents
@@ -109,7 +111,7 @@ def upload_resources(filename, skip=0, limit=None):
             if limit and i >= limit:
                 break
     # Create a 2dsphere index on the location field for geospatial queries
-	app.data.driver.db['facilities'].create_index([('location', '2dsphere')])
+	app.data.driver.db['resources'].create_index([('location', '2dsphere')])
     print "Resources uploaded!"
 
 
@@ -117,6 +119,44 @@ def upload_resources(filename, skip=0, limit=None):
 def delete_resources():
     """Delete all existing resources"""
     print delete_documents(facility_schema['endpoint'])
+
+
+@manager.command
+def rebuild_indexes():
+    """Make sure all important database indexes are created."""
+    query_index = [
+        ('school_type', pymongo.ASCENDING),
+        ('region', pymongo.ASCENDING),
+        ('district', pymongo.ASCENDING),
+        ('national_rank', pymongo.ASCENDING),
+    ]
+
+    spatial_index = [('location', pymongo.GEOSPHERE)]
+
+    text_index = [
+        ('name', pymongo.TEXT),
+        ('code', pymongo.TEXT),
+        ('region', pymongo.TEXT),
+        ('district', pymongo.TEXT),
+        ('village', pymongo.TEXT),
+    ]
+    
+    text_weights = {
+        'name': 2,
+        'code': 2
+    }
+
+    print "Droping existing indexes ..."
+    app.data.driver.db['resources'].drop_indexes()
+    app.data.driver.db['facilities'].drop_indexes()
+    app.data.driver.db['services'].drop_indexes()
+    print "Creating resources index for more efficient querying ..."
+    app.data.driver.db['resources'].ensure_index(query_index, name='QueryIndex', background=True)
+    print "Creating location index for spatial queries ..."
+    app.data.driver.db['resources'].ensure_index(spatial_index, name='2dSphereIndex', background=True)
+    print "Creating resources index for text search ..."
+    app.data.driver.db['resources'].ensure_index(text_index, name='TextIndex', background=True, weights=text_weights)
+    print "Indexes created!"
 
 
 if __name__ == "__main__":
