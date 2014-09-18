@@ -352,6 +352,7 @@ angular.module('taarifaApp')
               icon: makeAwesomeIcon(poi.status_group)
 
       @addPOI = (pois) ->
+        spinner.spin()
         window.markers = {}
         pois.forEach (poi) ->
           if poi.location?
@@ -365,6 +366,7 @@ angular.module('taarifaApp')
         if options.coverage
           coords = pois.map (x) -> [x.location.coordinates[1], x.location.coordinates[0]]
           coverageLayer.setData coords
+        spinner.stop()
 
 
       @zoomToMarkers = () ->

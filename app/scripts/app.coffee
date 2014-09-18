@@ -15,6 +15,7 @@ app = angular
   ])
 
   .config ($routeProvider, $httpProvider, flashProvider) ->
+    request: (config) ->
     $routeProvider
       .when '/',
         templateUrl: 'views/main.html'
@@ -28,8 +29,24 @@ app = angular
         controller: 'SchoolCtrl'
       .otherwise
         redirectTo: '/'
+
     $httpProvider.defaults.headers.patch =
       'Content-Type': 'application/json;charset=utf-8'
+
+    $httpProvider.interceptors.push () ->
+      request: (config) ->
+        # Intercept requests and start spinner
+        spinner.spin()
+        config
+      response: (response) ->
+        # Intercept response
+        spinner.stop()
+        response
+      responseError: (response) ->
+        # Intercept error response
+        spinner.stop()
+        response
+ 
     flashProvider.errorClassnames.push 'alert-danger'
 
   .filter('titlecase', () -> 

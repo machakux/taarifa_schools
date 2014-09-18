@@ -29,14 +29,23 @@ angular.module('taarifaApp')
       gettextCatalog.setCurrentLanguage(lang)
 
   .controller 'MainCtrl', ($scope, $http, $location, MainResource, Map, flash, gettext) ->
+
     map = Map "poiMap", showScale:true
     $scope.where = $location.search()
     $scope.schoolTypes = ['primary', 'secondary']
     $scope.where.max_results = parseInt($scope.where.max_results) || 100000
-    $http.get($scope.resourceBaseURI + 'values/region', cache: true).success (regions) ->
-      $scope.regions = regions
-    $http.get($scope.resourceBaseURI + 'values/district', cache: true).success (districts) ->
-      $scope.districts = districts
+    
+    getDistricts = () ->
+      $http.get($scope.resourceBaseURI + 'values/district', cache: true).success (districts) ->
+        $scope.districts = districts
+      
+    getRegions = () ->
+      $http.get($scope.resourceBaseURI + 'values/region', cache: true).success (regions) ->
+        $scope.regions = regions
+
+    getRegions()
+    getDistricts()
+
     $scope.clearDistrict = ->
       $scope.where.district = null
       $location.search 'district', null
@@ -44,10 +53,8 @@ angular.module('taarifaApp')
     $scope.resetParameters = ->
       $scope.where = 
         max_results: 100000
-      $http.get($scope.resourceBaseURI + 'values/region', cache: true).success (regions) ->
-        $scope.regions = regions
-      $http.get($scope.resourceBaseURI + 'values/district', cache: true).success (lgas) ->
-        $scope.districts = districts
+      getRegions()
+      getDistricts()
 
     $scope.updateMap = (nozoom) ->
       $location.search($scope.where)
@@ -93,6 +100,7 @@ angular.module('taarifaApp')
       , (results) ->
         if results._items.length == 0
           flash.info = gettext('No items match your filter criteria!')
+          spinner.stop()
           return
         $scope.results = results._items
         map.addPOI(results._items)
