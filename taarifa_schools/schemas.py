@@ -20,6 +20,10 @@ resource_schema = {
         'type': 'string',
         'label': 'District',
     },
+    'ward': {
+        'type': 'string',
+        'label': 'Ward',
+    },
     'latitude': {
         'type': 'float',
         'label': 'Latitude',
@@ -95,6 +99,22 @@ resource_schema = {
     'ownership': {
         'type': 'string',
         'label': 'Ownership',
+    },
+    'number_enrolled': {
+        'type': 'integer',
+        'label': 'Number of enrolled pupils',
+    },
+    'number_teaching_staff': {
+        'type': 'integer',
+        'label': 'Number of teaching staff',
+    },
+    'number_non_teaching_staff_by_school': {
+        'type': 'integer',
+        'label': 'Number of non teaching staff employed by school',
+    },
+    'number_non_teaching_staff_by_govt': {
+        'type': 'integer',
+        'label': 'Number of non teaching staff employed by govt',
     },
     'recording_date': {
         'type': 'datetime',
