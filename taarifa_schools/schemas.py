@@ -92,6 +92,22 @@ resource_schema = {
         'type': 'float',
         'label': 'Change in percentage pass last year',
     },
+    'percentage_pass_target': {
+        'type': 'float',
+        'label': 'Percentage pass target',
+    },
+    'percentage_pass_target_last': {
+        'type': 'float',
+        'label': 'Last year percentage pass target',
+    },
+    'percentage_pass_target_before_last': {
+        'type': 'float',
+        'label': 'Percentage pass target before last year',
+    },
+    'percentage_pass_target_next': {
+        'type': 'float',
+        'label': 'Next year percentage pass target',
+    },
     'school_type': {
         'type': 'string',
         'label': 'School type',
