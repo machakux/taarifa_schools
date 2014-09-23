@@ -17,7 +17,9 @@ from .utils import csv_dictwritter
 RESOURCE_URL = getattr(settings, 'RESOURCE_URL',
                        app.config['URL_PREFIX'])
 
+
 app.name = 'TaarifaSchools'
+
 
 # Override the maximum number of results on a single page
 # This is needed by the dashboard
@@ -27,7 +29,29 @@ app.config['PAGINATION_LIMIT'] = 100000
 
 # Resources of different types are stored in one collection.
 # TODO: Perform queries per resource type.
- 
+
+
+@app.route(RESOURCE_URL + 'download/')
+def resource_download():
+    """
+    Return resources.
+    """
+    params = dict(request.args.items())
+    fmt = params.pop('fmt', 'csv')
+    fields = params.pop('fields', None)
+    if fields:
+        fields = fields.split(',')
+    # FIXME: Direct call to the PyMongo driver, should be abstracted
+    data = app.data.driver.db['resources'].find(params)
+    if fmt == 'csv':
+        headers = {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename="schools.csv"'
+        }
+        return Response(csv_dictwritter(data,fields), mimetype='text/csv', headers=headers)
+    return send_response('resources', [data])
+
+
 @app.route(RESOURCE_URL + 'values/<field>')
 def resource_values(field):
     """
@@ -111,7 +135,6 @@ def resource_total_count():
             query = json.loads(query['$where'])
         except:
             pass
-    print query
     return send_response('resources', ({'count': resources.find(query).count()},))
 
 

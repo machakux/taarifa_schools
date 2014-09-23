@@ -11,9 +11,8 @@ def csv_dictwritter(data, fields=None):
     else:
         header_row = dict([f, f] for f in fields)
     output = io.BytesIO()
-    writer = csv.DictWriter(output, fields)
+    writer = csv.DictWriter(output, fields, extrasaction='ignore')
     writer.writerow(header_row)
-    for row in data:
-        writer.writerow(row)
+    writer.writerows(data)
     return output.getvalue()
     
