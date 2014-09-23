@@ -15,10 +15,10 @@
                         <li gridster-item="item" ng-repeat="item in gridLayout.tiles">
                             <div class="tile-header">{{tiles[$index][0] || 'unknown' | translate | titlecase}}</div>
                             <small translate>Current percentage pass</small><br />
-                            <span class="tile-number">{{tiles[$index][1].percent | number:2 }} %</span><br />
+                            <span class="tile-number">{{tiles[$index][1].percentPass | number:2 }} %</span><br />
                             <div>
                                 <small translate>Previous year</small>:
-                                <span class="tile-info">{{tiles[$index][1].percentLast| number:2 }} %</span>
+                                <span class="tile-info">{{tiles[$index][1].percentPassLast| number:2 }} %</span>
                             </div>
                             <div>
                                 <small translate>Change</small>:

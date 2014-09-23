@@ -241,9 +241,7 @@ angular.module('taarifaApp')
         .success (data, status, headers, config) ->
           $scope.percentagePass = {}
           data.forEach( (x) ->
-            x.percent = x.numberPass / x.candidates * 100
-            x.percentLast = x.numberPassLast / x.candidatesLast * 100
-            x.passChange = x.percent - x.percentLast
+            x.passChange = x.percentPass - x.percentPassLast
             $scope.percentagePass[x.school_type] =
               this: x.numberPass / x.candidates * 100
               last: x.numberPassLast / x.candidatesLast * 100

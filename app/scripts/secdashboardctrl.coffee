@@ -79,9 +79,9 @@ angular.module('taarifaApp')
       $http.get($scope.resourceBaseURI + 'performance/school_type?school_type=secondary&region=' + $scope.region, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.percentagePass = {}
-          $scope.percentagePass['this'] = data[0].numberPass / data[0].candidates * 100
-          $scope.percentagePass['last'] = data[0].numberPassLast / data[0].candidatesLast * 100
-          $scope.percentagePass['beforeLast'] = data[0].numberPassBeforeLast / data[0].candidatesBeforeLast * 100
+          $scope.percentagePass['this'] = data[0].percentPass
+          $scope.percentagePass['last'] = data[0].percentPassLast
+          $scope.percentagePass['beforeLast'] = data[0].percentPassBeforeLast
           $scope.percentagePass['change'] = $scope.percentagePass['this'] - $scope.percentagePass['last']
           $scope.percentagePass['changeLast'] = $scope.percentagePass['last'] - $scope.percentagePass['beforeLast']
           $scope.performanceTotal = data[0]

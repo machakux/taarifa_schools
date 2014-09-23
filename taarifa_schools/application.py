@@ -1,4 +1,4 @@
-from flask import request, send_from_directory
+from flask import request, send_from_directory, Response
 from eve.render import send_response
 from werkzeug.contrib.cache import SimpleCache
 cache = SimpleCache()
@@ -11,6 +11,7 @@ except ImportError:
 from taarifa_api import api as app, main
 
 from . import settings
+from .utils import csv_dictwritter
 
 
 RESOURCE_URL = getattr(settings, 'RESOURCE_URL',
@@ -46,12 +47,20 @@ def resource_count(field):
     """
     Return number of resources grouped a given field.
     """
+    params = dict(request.args.items())
+    fmt = params.pop('fmt', None) 
     # FIXME: Direct call to the PyMongo driver, should be abstracted
-    resources = app.data.driver.db['resources']
-    return send_response('resources', (resources.group(
-        field.split(','), dict(request.args.items()),
+    data = app.data.driver.db['resources'].group(
+        field.split(','), params,
         initial={'count': 0},
-        reduce="function(curr, result) {result.count++;}"),))
+        reduce="function(curr, result) {result.count++;}")
+    if fmt == 'csv':
+        headers = {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename="count_%s.csv"' %field
+        }
+        return Response(csv_dictwritter(data), mimetype='text/csv', headers=headers)
+    return send_response('resources', [data])
 
 
 @app.route(RESOURCE_URL + 'sum/<group>/<field>')
@@ -59,11 +68,13 @@ def resource_sum(group, field):
     """
     Return sum of a given field per group.
     """
-    # FIXME: Direct call to the PyMongo driver, should be abstracted
     fields = field.split(',')
+    params = dict(request.args.items())
+    fmt = params.pop('fmt', None) 
+    # FIXME: Direct call to the PyMongo driver, should be abstracted
     data = app.data.driver.db['resources'].aggregate([
         {
-            "$match": dict(request.args.items())
+            "$match": params
         },
         {
             "$group": {
@@ -72,6 +83,18 @@ def resource_sum(group, field):
             }
         },
         {"$sort": {group: 1}}])['result']
+    if fmt == 'csv':
+        headers = {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename="sum_%s-%s.csv"' %(field, group)
+            }
+        return Response(csv_dictwritter(data), mimetype='text/csv', headers=headers)
+    if fmt == 'csv':
+        headers = {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename="sum_%s-%s.csv"' %(field, group)
+        }
+        return Response(csv_dictwritter(data), mimetype='text/csv', headers=headers)
     return send_response('resources', [data])
 
 
@@ -145,11 +168,13 @@ def performance(group):
     """
     # FIXME: Direct call to the PyMongo driver, should be abstracted
     # TODO: Provide generic implementation to allow more dynamic grouping
-    resources = app.data.driver.db['resources']
-    return send_response('resources', (
-        resources.aggregate([
+    
+    params = dict(request.args.items())
+    fmt = params.pop('fmt', None) 
+    data = app.data.driver.db['resources'].aggregate(
+        [
             {
-                "$match": dict(request.args.items())
+                "$match": params
             },
             {
                 "$group": {
@@ -159,8 +184,7 @@ def performance(group):
                     "numberPassBeforeLast": {'$sum': '$number_pass_before_last'},
                     "candidates": {'$sum': '$candidates'},
                     "candidatesLast": {'$sum': '$candidates_last'},
-                    "candidatesBeforeLast": {'$sum': '$candidates_before_last'},
-        
+                    "candidatesBeforeLast": {'$sum': '$candidates_before_last'}        
                 }
             },
             {
@@ -173,10 +197,29 @@ def performance(group):
                     "candidates": 1,
                     "candidatesLast": 1,
                     "candidatesBeforeLast": 1,
+                    "percentPass": {
+                        '$cond': {'if': { '$ne': [ "$candidates", 0 ] },
+                        'then': {'$multiply': [{'$divide': ['$numberPass', '$candidates']}, 100]},
+                        'else': None }},
+                    "percentPassLast": {
+                        '$cond': {'if': { '$ne': [ "$candidatesLast", 0 ] },
+                        'then': {'$multiply': [{'$divide': ['$numberPassLast', '$candidatesLast']}, 100]},
+                        'else': None }},
+                    "percentPassBeforeLast": {
+                        '$cond': {'if': { '$ne': [ "$candidatesBeforeLast", 0 ] },
+                        'then': {'$multiply': [{'$divide': ['$numberPassBeforeLast', '$candidatesBeforeLast']}, 100]},
+                        'else': None }}
                 }
             },
             {"$sort": {group: 1}}
-        ])['result'],))
+        ])['result']
+    if fmt == 'csv':
+        headers = {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename="performance_%s.csv"' %group
+        }
+        return Response(csv_dictwritter(data), mimetype='text/csv', headers=headers)
+    return send_response('resources', [data])
 
 
 @app.route('/scripts/<path:filename>')
