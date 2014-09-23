@@ -42,13 +42,22 @@ def resource_download():
     if fields:
         fields = fields.split(',')
     # FIXME: Direct call to the PyMongo driver, should be abstracted
-    data = app.data.driver.db['resources'].find(params)
+    data = list(app.data.driver.db['resources'].find(params))
     if fmt == 'csv':
+        for item in data:
+            location = item.get('location')
+            if location:
+                try:
+                    item['longitude'] = location['coordinates'][0]
+                    item['latitude'] = location['coordinates'][1]
+                    item.pop('location')
+                except:
+                    pass
         headers = {
             'Content-Type': 'text/csv',
             'Content-Disposition': 'attachment; filename="schools.csv"'
         }
-        return Response(csv_dictwritter(data,fields), mimetype='text/csv', headers=headers)
+        return Response(csv_dictwritter(data, fields), mimetype='text/csv', headers=headers)
     return send_response('resources', [data])
 
 
