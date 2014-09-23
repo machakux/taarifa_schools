@@ -217,16 +217,16 @@ angular.module('taarifaApp')
 
       options = _.extend(defaults, opts)
 
-      osmLayer = L.tileLayer(
-        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        attribution: '(c) OpenStreetMap')
+      mapLayer = L.tileLayer(
+        'https://{s}.tiles.mapbox.com/v3/emilli.jj2l2761/{z}/{x}/{y}.png',
+        attribution: '<a href="https://www.mapbox.com/about/maps/">© Mapbox © OpenStreetMap</a>')
 
       satLayer = L.tileLayer(
         'http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attribution: '(c) Esri')
 
       baseMaps =
-        "Open Street Map": osmLayer
+        "Map": mapLayer
         "Satellite": satLayer
 
       overlays = {}
@@ -237,7 +237,7 @@ angular.module('taarifaApp')
         markerLayer = L.featureGroup()
 
       overlays.Waterpoints = markerLayer
-      defaultLayers = [osmLayer, markerLayer]
+      defaultLayers = [mapLayer, markerLayer]
 
       if options.coverage
         coverageLayer = L.TileLayer.maskCanvas
