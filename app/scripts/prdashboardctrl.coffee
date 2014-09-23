@@ -39,10 +39,12 @@ angular.module('taarifaApp')
         { sizeX: 6, sizeY: 6, row: 0, col: 6 }
       top:
         { sizeX: 6, sizeY: 4, row: 2, col: 0 }
+      report:
+        { sizeX: 12, sizeY: 10, row: 6, col: 0}
       plots: [
-        { sizeX: 12, sizeY: 5, row: 6, col: 0 },
-        { sizeX: 6, sizeY: 5, row: 11, col: 0 }
-        { sizeX: 6, sizeY: 5, row: 11, col: 6 }
+        { sizeX: 12, sizeY: 5, row: 16, col: 0 },
+        { sizeX: 6, sizeY: 5, row: 21, col: 0 }
+        { sizeX: 6, sizeY: 5, row: 21, col: 6 }
       ]
     }
 
@@ -74,14 +76,14 @@ angular.module('taarifaApp')
           callback()
 
     getPerformanceTotal = () ->
-      $http.get($scope.resourceBaseURI + 'performance?school_type=primary&region=' + $scope.region, cache: cacheHttp)
+      $http.get($scope.resourceBaseURI + 'performance/school_type?school_type=primary&region=' + $scope.region, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.percentagePass = {}
-          $scope.percentagePass['this'] = data[0].numberPass / data[0].candidates * 100
-          $scope.percentagePass['last'] = data[0].numberPassLast / data[0].candidatesLast * 100
-          $scope.percentagePass['beforeLast'] = data[0].numberPassBeforeLast / data[0].candidatesBeforeLast * 100
-          $scope.percentagePass['change'] = $scope.percentagePass['this'] - $scope.percentagePass['last']
-          $scope.percentagePass['changeLast'] = $scope.percentagePass['last'] - $scope.percentagePass['beforeLast']
+          $scope.percentagePass.this = data[0].numberPass / data[0].candidates * 100
+          $scope.percentagePass.last = data[0].numberPassLast / data[0].candidatesLast * 100
+          $scope.percentagePass.beforeLast = data[0].numberPassBeforeLast / data[0].candidatesBeforeLast * 100
+          $scope.percentagePass.change = $scope.percentagePass.this - $scope.percentagePass.last
+          $scope.percentagePass.changeLast = $scope.percentagePass.last - $scope.percentagePass.beforeLast
           $scope.performanceTotal = data[0]
 
     getSchoolsCount = () ->
@@ -95,6 +97,9 @@ angular.module('taarifaApp')
           $scope.schoolsCount = data.count
           getCountImprovedThan()
           getCountByGoal()
+          getCountByOwnership()
+          getEnrolmentSum()
+          getStaffSum()
 
     getCountImprovedThan = () ->
       # modalSpinner.open()
@@ -119,6 +124,33 @@ angular.module('taarifaApp')
         .success (data, status, headers, config) ->
           $scope.improvedThan.last = data
           # modalSpinner.close()
+
+    getCountByOwnership = () ->
+      endpoint = 'count/ownership?region=' + $scope.region + '&school_type=primary'
+      $http.get($scope.resourceBaseURI + endpoint, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.schoolsCountByOwner = data
+          $scope.countByOwnerGraphData = $scope.graphArray(data, 'ownership', 'count')
+          plotDonutChart('#ownershipCountDonutChartPr', $scope.countByOwnerGraphData)
+
+    getEnrolmentSum = () ->
+      endpoint = 'sum/ownership/number_enrolled?region=' + $scope.region + '&school_type=primary'
+      $http.get($scope.resourceBaseURI + endpoint, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.enrolledSumByOwner = data
+          $scope.enrolledByOwnerGraphData = $scope.graphArray(data, '_id', 'sum')
+          plotDonutChart('#ownershipEnrollmentDonutChartPr', $scope.enrolledByOwnerGraphData)
+
+    getStaffSum = () ->
+      params = '?region=' + $scope.region + '&school_type=primary'
+      endpointTeaching = 'sum/ownership/number_teaching_staff' + params
+      endpointNonTeaching = 'sum/ownership/number_non_teaching_staff_by_school,number_non_teaching_staff_by_govt' + params
+      $http.get($scope.resourceBaseURI + endpointTeaching, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumTeachingStaff = $scope.graphArray(data, '_id', 'sum')
+      $http.get($scope.resourceBaseURI + endpointNonTeaching, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumNonTeachingStaff = $scope.graphArray(data, '_id', 'sum')
 
     getTopSchools = () ->
       params = 'where={"region":"' + $scope.region + '", "school_type":"primary"}&max_results=50&sort=[("national_rank",1)]'
@@ -221,6 +253,15 @@ angular.module('taarifaApp')
         },
       ]
 
+    $scope.graphArray = (data, x_field, y_field) ->
+      graph = []
+      data.forEach( (item) ->
+        itemObj = {x: item[x_field] || '', y: item[y_field] || 0}
+        if itemObj.x isnt '' or itemObj.y isnt 0
+          graph.push itemObj
+      )
+      graph
+
     $scope.$on "gettextLanguageChanged", (e) ->
       # redraw the plots so axis labels, etc are translated
 
@@ -255,6 +296,10 @@ angular.module('taarifaApp')
         plotMultiBarChart('#performanceChartPrimary', $scope.graphPerformance)
         plotMultiBarHorizontalChart('#numberPassChartPrimary', $scope.graphNumberPass)
         plotMultiBarHorizontalChart("#performanceChangeChartPrimary", $scope.graphPerformanceChange)
+      if $scope.countByOwnerGraphData
+        plotDonutChart('#ownershipCountDonutChartPr', $scope.countByOwnerGraphData)
+      if $scope.enrolledByOwnerGraphData
+        plotDonutChart('#ownershipEnrollmentDonutChartPr', $scope.enrolledByOwnerGraphData)
 
     $scope.initView = () ->
       getRegions(getData)

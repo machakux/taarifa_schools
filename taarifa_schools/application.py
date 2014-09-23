@@ -54,6 +54,27 @@ def resource_count(field):
         reduce="function(curr, result) {result.count++;}"),))
 
 
+@app.route(RESOURCE_URL + 'sum/<group>/<field>')
+def resource_sum(group, field):
+    """
+    Return sum of a given field per group.
+    """
+    # FIXME: Direct call to the PyMongo driver, should be abstracted
+    fields = field.split(',')
+    data = app.data.driver.db['resources'].aggregate([
+        {
+            "$match": dict(request.args.items())
+        },
+        {
+            "$group": {
+                "_id": '$' + group,
+                "sum": {'$sum': {'$add': ['$' + f for f in fields] }},
+            }
+        },
+        {"$sort": {group: 1}}])['result']
+    return send_response('resources', [data])
+
+
 @app.route(RESOURCE_URL + 'total_count')
 def resource_total_count():
     """
@@ -117,48 +138,8 @@ def resource_stats(field, group):
         ])['result'],))
 
 
-@app.route(RESOURCE_URL + 'performance')
-def performance_total():
-    """
-    Return total performance stats.
-    """
-    # FIXME: Direct call to the PyMongo driver, should be abstracted
-    # TODO: Provide generic implementation to allow more dynamic grouping
-    resources = app.data.driver.db['resources']
-    return send_response('resources', (
-        resources.aggregate([
-            {
-                "$match": dict(request.args.items())
-            },
-            {
-                "$group": {
-                    "_id": '$school_type' ,
-                    "numberPass": {'$sum': '$number_pass'},
-                    "numberPassLast": {'$sum': '$number_pass_last'},
-                    "numberPassBeforeLast": {'$sum': '$number_pass_before_last'},
-                    "candidates": {'$sum': '$candidates'},
-                    "candidatesLast": {'$sum': '$candidates_last'},
-                    "candidatesBeforeLast": {'$sum': '$candidates_before_last'}
-                }
-            },
-            {
-                "$project": {
-                      "_id": 0,
-                      "school_type": "$_id",
-                      "numberPass": 1,
-                      "numberPassLast": 1,
-                      "numberPassBeforeLast": 1,
-                      "candidates": 1,
-                      "candidatesLast": 1,
-                      "candidatesBeforeLast": 1,
-                }
-            },
-            {"$sort": {"numberPass": 1}}
-        ])['result'],))
-
-
 @app.route(RESOURCE_URL + 'performance/<group>')
-def performance_stats(group):
+def performance(group):
     """
     Return performance stats.
     """

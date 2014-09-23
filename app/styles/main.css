@@ -287,6 +287,14 @@ div.region-info {
     display: block;
     background: #FBFBFB
 }
+.y-auto{
+    max-height: 98%;
+    overflow-y: auto
+}
+.donut-small{
+    height: 200px;
+    display: block;
+}
 @media print 
 {
     .no-print{display: none}

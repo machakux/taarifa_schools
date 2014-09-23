@@ -39,10 +39,12 @@ angular.module('taarifaApp')
         { sizeX: 6, sizeY: 6, row: 0, col: 6 }
       top:
         { sizeX: 6, sizeY: 4, row: 2, col: 0 }
+      report:
+        { sizeX: 12, sizeY: 10, row: 6, col: 0}
       plots: [
-        { sizeX: 12, sizeY: 5, row: 6, col: 0 },
-        { sizeX: 6, sizeY: 5, row: 11, col: 0 }
-        { sizeX: 6, sizeY: 5, row: 11, col: 6 }
+        { sizeX: 12, sizeY: 5, row: 16, col: 0 },
+        { sizeX: 6, sizeY: 5, row: 21, col: 0 }
+        { sizeX: 6, sizeY: 5, row: 21, col: 6 }
       ]
     }
 
@@ -74,7 +76,7 @@ angular.module('taarifaApp')
           callback()
 
     getPerformanceTotal = () ->
-      $http.get($scope.resourceBaseURI + 'performance?school_type=secondary&region=' + $scope.region, cache: cacheHttp)
+      $http.get($scope.resourceBaseURI + 'performance/school_type?school_type=secondary&region=' + $scope.region, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.percentagePass = {}
           $scope.percentagePass['this'] = data[0].numberPass / data[0].candidates * 100
@@ -95,6 +97,9 @@ angular.module('taarifaApp')
           $scope.schoolsCount = data.count
           getCountImprovedThan()
           getCountByGoal()
+          getCountByOwnership()
+          getEnrolmentSum()
+          getStaffSum()
 
     getCountImprovedThan = () ->
       # modalSpinner.open()
@@ -119,6 +124,33 @@ angular.module('taarifaApp')
         .success (data, status, headers, config) ->
           $scope.improvedThan.last = data
           # modalSpinner.close()
+
+    getCountByOwnership = () ->
+      endpoint = 'count/ownership?region=' + $scope.region + '&school_type=secondary'
+      $http.get($scope.resourceBaseURI + endpoint, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.schoolsCountByOwner = data
+          $scope.countByOwnerGraphData = $scope.graphArray(data, 'ownership', 'count')
+          plotDonutChart('#ownershipCountDonutChartSc', $scope.countByOwnerGraphData)
+
+    getEnrolmentSum = () ->
+      endpoint = 'sum/ownership/number_enrolled?region=' + $scope.region + '&school_type=secondary'
+      $http.get($scope.resourceBaseURI + endpoint, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.enrolledSumByOwner = data
+          $scope.enrolledByOwnerGraphData = $scope.graphArray(data, '_id', 'sum')
+          plotDonutChart('#ownershipEnrollmentDonutChartSc', $scope.enrolledByOwnerGraphData)
+
+    getStaffSum = () ->
+      params = '?region=' + $scope.region + '&school_type=secondary'
+      endpointTeaching = 'sum/ownership/number_teaching_staff' + params
+      endpointNonTeaching = 'sum/ownership/number_non_teaching_staff_by_school,number_non_teaching_staff_by_govt' + params
+      $http.get($scope.resourceBaseURI + endpointTeaching, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumTeachingStaff = $scope.graphArray(data, '_id', 'sum')
+      $http.get($scope.resourceBaseURI + endpointNonTeaching, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumNonTeachingStaff = $scope.graphArray(data, '_id', 'sum')
 
     getCountByGoal = () ->
       # modalSpinner.open()
@@ -222,6 +254,15 @@ angular.module('taarifaApp')
         },
       ]
 
+    $scope.graphArray = (data, x_field, y_field) ->
+      graph = []
+      data.forEach( (item) ->
+        itemObj = {x: item[x_field] || '', y: item[y_field] || 0}
+        if itemObj.x isnt '' or itemObj.y isnt 0
+          graph.push itemObj
+      )
+      graph
+
     $scope.$on "gettextLanguageChanged", (e) ->
       # redraw the plots so axis labels, etc are translated
 
@@ -256,6 +297,10 @@ angular.module('taarifaApp')
         plotMultiBarChart('#performanceChartSecondary', $scope.graphPerformance)
         plotMultiBarHorizontalChart('#numberPassChartSecondary', $scope.graphNumberPass)
         plotMultiBarHorizontalChart("#performanceChangeChartSecondary", $scope.graphPerformanceChange)
+      if $scope.countByOwnerGraphData
+        plotDonutChart('#ownershipCountDonutChartsc', $scope.countByOwnerGraphData)
+      if $scope.enrolledByOwnerGraphData
+        plotDonutChart('#ownershipEnrollmentDonutChartSc', $scope.enrolledByOwnerGraphData)
 
     $scope.initView = () ->
       getRegions(getData)

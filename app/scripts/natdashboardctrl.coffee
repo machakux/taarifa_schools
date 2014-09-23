@@ -41,18 +41,21 @@ angular.module('taarifaApp')
       count:
         { sizeX: 6, sizeY: 4, row: 2, col: 0 }
 
+      report:
+        { sizeX: 12, sizeY: 14, row: 6, col: 0}
+
       plots: [
-        { sizeX: 12, sizeY: 6, row: 6, col: 0 },
-        { sizeX: 6, sizeY: 8, row: 12, col: 0 }
-        { sizeX: 6, sizeY: 8, row: 12, col: 6 }
+        { sizeX: 12, sizeY: 6, row: 20, col: 0 },
+        { sizeX: 6, sizeY: 8, row: 26, col: 0 }
+        { sizeX: 6, sizeY: 8, row: 26, col: 6 }
       ]
 
       topPrimary:
-        { sizeX: 6, sizeY: 6, row: 20, col: 0 }
+        { sizeX: 6, sizeY: 6, row: 29, col: 0 }
 
       topSecondary:
-        { sizeX: 6, sizeY: 6, row: 20, col: 6 }
-      
+        { sizeX: 6, sizeY: 6, row: 29, col: 6 }
+
     }
 
     $scope.plots = [
@@ -180,21 +183,73 @@ angular.module('taarifaApp')
           $scope.reachedGoal.secondaryLast = data
           # modalSpinner.close()
 
+    getCountByOwnership = () ->
+      endpointSc = 'count/ownership?&school_type=secondary'
+      endpointPr = 'count/ownership?&school_type=primary'
+      $scope.schoolsCountByOwner = {}
+      $http.get($scope.resourceBaseURI + endpointSc, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.schoolsCountByOwner.secondary = $scope.graphArray(data, 'ownership', 'count')
+          plotDonutChart('#ownershipCountDonutChartNatSc', $scope.schoolsCountByOwner.secondary)
+      $http.get($scope.resourceBaseURI + endpointPr, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.schoolsCountByOwner.primary = $scope.graphArray(data, 'ownership', 'count')
+          plotDonutChart('#ownershipCountDonutChartNatPr', $scope.schoolsCountByOwner.primary)
+
+    getEnrolmentSum = () ->
+      endpointSc = 'sum/ownership/number_enrolled?school_type=secondary'
+      endpointPr = 'sum/ownership/number_enrolled?school_type=primary'
+      $scope.enrolledSumByOwner = {}
+      $http.get($scope.resourceBaseURI + endpointSc, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.enrolledSumByOwner.secondary = $scope.graphArray(data, '_id', 'sum')
+          plotDonutChart('#ownershipEnrollmentDonutChartNatSc', $scope.enrolledSumByOwner.secondary)
+      $http.get($scope.resourceBaseURI + endpointPr, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.enrolledSumByOwner.primary = $scope.graphArray(data, '_id', 'sum')
+          plotDonutChart('#ownershipEnrollmentDonutChartNatPr', $scope.enrolledSumByOwner.primary)
+
+    getStaffSum = () ->
+      paramsSc = '?school_type=secondary'
+      paramsPr = '?school_type=primary'
+      endpointTeaching = 'sum/ownership/number_teaching_staff'
+      endpointNonTeaching = 'sum/ownership/number_non_teaching_staff_by_school,number_non_teaching_staff_by_govt'
+      $scope.sumTeachingStaff = {}
+      $scope.sumNonTeachingStaff = {}
+      $http.get($scope.resourceBaseURI + endpointTeaching + paramsSc, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumTeachingStaff.secondary = $scope.graphArray(data, '_id', 'sum')
+      $http.get($scope.resourceBaseURI + endpointNonTeaching + paramsSc, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumNonTeachingStaff.secondary = $scope.graphArray(data, '_id', 'sum')
+      $http.get($scope.resourceBaseURI + endpointTeaching + paramsPr, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumTeachingStaff.primary = $scope.graphArray(data, '_id', 'sum')
+      $http.get($scope.resourceBaseURI + endpointNonTeaching + paramsSc, cache: cacheHttp)
+        .success (data, status, headers, config) ->
+          $scope.sumNonTeachingStaff.primary = $scope.graphArray(data, '_id', 'sum')
+
+
     getPerformanceSchoolType = () ->
       $scope.shoolTypeChoice = "all"
 
       # modalSpinner.open()
 
-      $http.get($scope.resourceBaseURI + 'performance',
+      $http.get($scope.resourceBaseURI + 'performance/school_type',
         cache: cacheHttp
         params: _.omit($scope.params,'group'))
         .success (data, status, headers, config) ->
+          $scope.percentagePass = {}
           data.forEach( (x) ->
             x.percent = x.numberPass / x.candidates * 100
             x.percentLast = x.numberPassLast / x.candidatesLast * 100
             x.passChange = x.percent - x.percentLast
+            $scope.percentagePass[x.school_type] =
+              this: x.numberPass / x.candidates * 100
+              last: x.numberPassLast / x.candidatesLast * 100
+              beforeLast: x.numberPassBeforeLast / x.candidatesBeforeLast * 100
+              change: x.percent - x.percentLast
           )
-
           # index by school_type for convenience
           schoolTypeMap = _.object(_.pluck(data, "school_type"), data)
           $scope.schoolType = schoolTypeMap
@@ -319,6 +374,7 @@ angular.module('taarifaApp')
       if $scope.typeCount
         graphCountTypeData($scope.typeCount)
         plotDonutChart('#typeCountDonutChart', $scope.graphTypeCount)
+      getStaffSum()
 
     $scope.drillDown = (fieldVal, fieldType, clearFilters) ->
       groupField = fieldType || $scope.params.group
@@ -356,6 +412,14 @@ angular.module('taarifaApp')
       groupField = $scope.params.group
       $scope.drillDown(d[groupField])
 
+    $scope.graphArray = (data, x_field, y_field) ->
+      graph = []
+      data.forEach( (item) ->
+        itemObj = {x: item[x_field] || '', y: item[y_field] || 0}
+        if itemObj.x isnt '' or itemObj.y isnt 0
+          graph.push itemObj
+      )
+      graph
 
     $scope.$on "gettextLanguageChanged", (e) ->
       # redraw the plots so axis labels, etc are translated
@@ -380,5 +444,7 @@ angular.module('taarifaApp')
       getCountSchoolType()
       getPerformance()
       getTopSchools()
+      getCountByOwnership()
+      getEnrolmentSum()
 
     initView()

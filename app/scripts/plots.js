@@ -90,6 +90,7 @@ function plotDonutChart(selector, data){
 
   nv.addGraph(function() {
     var chart = nv.models.pieChart()
+        .x(function(d) { return d.x +': ' + d.y })
         .showLabels(true)     //Display pie labels
         .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
         .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
