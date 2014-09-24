@@ -236,7 +236,7 @@ angular.module('taarifaApp')
       else
         markerLayer = L.featureGroup()
 
-      overlays.Waterpoints = markerLayer
+      overlays.Schools = markerLayer
       defaultLayers = [mapLayer, markerLayer]
 
       if options.coverage
