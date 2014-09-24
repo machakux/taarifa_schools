@@ -2,7 +2,7 @@
 
 angular.module('taarifaApp')
 
-  .controller 'SecondaryDashboardCtrl', ($scope, $http, $timeout,
+  .controller 'SecondaryDashboardCtrl', ($scope, $http, $timeout, $window,
                                 gettextCatalog, gettext) ->
 
     # should http calls be cached
@@ -187,18 +187,31 @@ angular.module('taarifaApp')
           # modalSpinner.close()
 
 
-    getTopSchools = () ->
+    getTopSchools = (download) ->
+      if download? and download
+        url = $scope.resourceBaseURI + 'download?fmt=csv&school_type=secondary&max_results=100&sort=[["national_rank",1]]&region=' + $scope.region
+        $window.open(url)
+        return
       params = 'where={"region":"' + $scope.region + '", "school_type":"secondary"}&max_results=50&sort=[("national_rank",1)]'
       $http.get($scope.resourceBaseURI + "?" + params, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.topSchools = data._items
 
-    getPerformance = () ->
+    $scope.downloadTopSchools = ->
+      getTopSchools(true)
+
+    getPerformance = (download) ->
       params = 'district/?region=' + $scope.region + '&school_type=secondary'
-      $http.get($scope.resourceBaseURI + "performance/" + params, cache: cacheHttp)
+      url = $scope.resourceBaseURI + "performance/" + params
+      if download? and download
+        $window.open(url+ '&fmt=csv')
+      $http.get(url, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.performanceData = data
           drawPlots()
+    
+    $scope.downloadPerformance = ->
+      getPerformance(true)
 
     graphPerformanceData = (data) ->
       performanceCurrent = []

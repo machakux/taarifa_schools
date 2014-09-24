@@ -28,7 +28,7 @@ angular.module('taarifaApp')
       # Using the setter function ensures the gettextLanguageChanged event gets fired
       gettextCatalog.setCurrentLanguage(lang)
 
-  .controller 'MainCtrl', ($scope, $http, $location, MainResource, Map, flash, gettext) ->
+  .controller 'MainCtrl', ($scope, $http, $location, $window, MainResource, Map, flash, gettext) ->
 
     map = Map "poiMap", showScale:true
     $scope.where = $location.search()
@@ -79,6 +79,10 @@ angular.module('taarifaApp')
     $scope.reset = ->
       $scope.resetParameters()
       $scope.updateMap()
+
+    $scope.download = ->
+      downloadUrl = $scope.resourceBaseURI + 'download' + $location.url()
+      $window.open(downloadUrl)
 
     query = (where, max_results, nozoom) ->
       map.clearMarkers()

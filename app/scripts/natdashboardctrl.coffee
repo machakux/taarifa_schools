@@ -2,7 +2,7 @@
 
 angular.module('taarifaApp')
 
-  .controller 'NationalDashboardCtrl', ($scope, $http, $timeout,
+  .controller 'NationalDashboardCtrl', ($scope, $http, $timeout, $window,
                                 gettextCatalog, gettext) ->
 
     # should http calls be cached
@@ -260,10 +260,13 @@ angular.module('taarifaApp')
           $scope.tiles = _.pairs(_.pick(schoolTypeMap, 'primary', 'secondary'))
           # modalSpinner.close()
  
-    getPerformance = () ->
+    getPerformance = (download) ->
       url = $scope.resourceBaseURI + "performance/" + $scope.params.group
+      if download? and download
+        $window.open(url + '?fmt=csv')
       if $scope.schoolTypeChoice and $scope.schoolTypeChoice isnt 'all'
           url += '?school_type=' + $scope.schoolTypeChoice
+          return
       $http.get(url, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.performanceData = data
@@ -272,15 +275,30 @@ angular.module('taarifaApp')
           plotMultiBarHorizontalChart('#numberPassChart', $scope.graphNumberPass)
           plotMultiBarHorizontalChart("#performanceChangeChart", $scope.graphPerformanceChange)
 
-    getTopSchools = () ->
+    $scope.downloadPerformance = () ->
+      getPerformance(true)
+
+    getTopSchools = (downloadPrimary, downloadSecondary) ->
       params_sec = 'where={"school_type":"secondary"}&max_results=100&sort=[("national_rank",1)]'
       params_pr = 'where={"school_type":"primary"}&max_results=100&sort=[("national_rank",1)]'
+      isDownload = false
+      if downloadPrimary? and downloadPrimary
+        $window.open($scope.resourceBaseURI + 'download?fmt=csv&school_type=primary&max_results=100&sort=[["national_rank",1]]')
+        isDownload = true
+      if downloadSecondary? and downloadSecondary
+        $window.open($scope.resourceBaseURI + 'download?fmt=csv&school_type=secondary&max_results=100&sort=[["national_rank",1]]')
+        isDownload = true
+      if isDownload
+        return
       $http.get($scope.resourceBaseURI + "?" + params_sec, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.topSchoolsSecondary = data._items
       $http.get($scope.resourceBaseURI + "?" + params_pr, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.topSchoolsPrimary = data._items
+
+    $scope.downloadTopSchools = (primary, secondary) ->
+        getTopSchools(primary, secondary)
 
     graphPerformanceData = (data) ->
       performanceCurrent = []

@@ -321,7 +321,7 @@
                                 
                                 <div class="panel-body" id="{{plots[$index].id}}">
                                     <div class="row">
-                                        <div class="col-sm-12 text-right">
+                                        <div class="col-sm-9 text-right">
                                             <form class="form-inline" role="form">
                                                 <div class="checkbox inline-fields" ng-repeat="school_type in schoolTypes">
                                                     <label for="{{ school_type }}-choice">
@@ -332,13 +332,27 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        <div class="col-sm-3">
+                                            <button class="btn btn-default btn-xs" ng-click="downloadPerformance()">
+                                                <i class="glyphicon glyphicon-download"></i> <span translate>Download</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </li>
 
                         <li gridster-item="gridLayout.topPrimary">
-                            <strong translate>Top Primary schools</strong>
+                            <div class="row">
+                                <div class="col-sm-9"><strong translate>Top Primary schools</strong></div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-default btn-xs" ng-click="downloadTopSchools(true, null)">
+                                        <i class="glyphicon glyphicon-download"></i> <span translate>Download</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            
                             <div class="table-responsive" style="max-height: 95%; overflow-y: auto">
                                 <table class="table table-hover table table-striped table-info">
                                     <thead>
@@ -359,7 +373,15 @@
                             </div>
                         </li>
                         <li gridster-item="gridLayout.topSecondary">
-                            <strong translate>Top Secondary schools</strong>
+                            <div class="row">
+                                <div class="col-sm-9"><strong translate>Top Secondary schools</strong></div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-default btn-xs" ng-click="downloadTopSchools(null, true)">
+                                        <i class="glyphicon glyphicon-download"></i> <span translate>Download</span>
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="table-responsive" style="max-height: 95%; overflow-y: auto">
                                 <table class="table table-hover table table-striped table-info">
                                     <thead>
@@ -491,7 +513,14 @@
 
                         
                         <li gridster-item="gridLayout.top">
-                            <strong>Top schools</strong>
+                            <div class="row">
+                                <div class="col-sm-9"><strong translate>Top schools</strong></div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-default btn-xs" ng-click="downloadTopSchools()">
+                                        <i class="glyphicon glyphicon-download"></i> <span translate>Download</span>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="table-responsive y-auto">
                                 <table class="table table-hover table table-striped table-info">
                                     <thead>
@@ -642,7 +671,16 @@
                         <li gridster-item="item" ng-repeat="item in gridLayout.plots" class="gridster-item-chart" >
                             <div class="panel panel-default plot">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">{{plots[$index].title | translate}}</h3>
+                                    <div class="panel-title">
+                                        <div class="row">
+                                            <div class="col-sm-9">{{plots[$index].title | translate}}</div>
+                                            <div class="col-sm-3">
+                                                <button class="btn btn-default btn-xs" ng-click="downloadPerformance()">
+                                                    <i class="glyphicon glyphicon-download"></i> <span translate>Download</span>
+                                                </button>                                    
+                                            </div>                                        
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <div class="panel-body" id="{{plots[$index].id}}">
@@ -764,7 +802,14 @@
 
                         
                         <li gridster-item="gridLayout.top">
-                            <strong>Top schools</strong>
+                            <div class="row">
+                                <div class="col-sm-9"><strong translate>Top schools</strong></div>
+                                <div class="col-sm-3">
+                                    <button class="btn btn-default btn-xs" ng-click="downloadTopSchools()">
+                                        <i class="glyphicon glyphicon-download"></i> <span translate>Download</span>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="table-responsive" style="max-height: 95%; overflow-y: auto">
                                 <table class="table table-hover table table-striped table-info">
                                     <thead>
@@ -915,7 +960,16 @@
                         <li gridster-item="item" ng-repeat="item in gridLayout.plots" class="gridster-item-chart" >
                             <div class="panel panel-default plot">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">{{plots[$index].title | translate}}</h3>
+                                    <div class="panel-title">
+                                        <div class="row">
+                                            <div class="col-sm-9">{{plots[$index].title | translate}}</div>
+                                            <div class="col-sm-3">
+                                                <button class="btn btn-default btn-xs" ng-click="downloadPerformance()">
+                                                    <i class="glyphicon glyphicon-download"></i> <span translate>Download</span>
+                                                </button>                                    
+                                            </div>                                        
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <div class="panel-body" id="{{plots[$index].id}}">
