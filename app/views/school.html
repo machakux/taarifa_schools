@@ -73,6 +73,24 @@
         
         <div class="col-lg-6">
             <div id="mapView" style="height: 400px; width: 100%; display: block"></div>
+            
+            <hr>
+
+            <div>
+                <div class="text-muted text-right" translate>Facilities</div>
+                <div>
+                    <span translate>Number of pupils enrolled</span>: <strong>{{ resource.number_enrolled| number }}</strong>
+                </div>
+                <div>
+                    <span translate>Teachers</span>: <strong>{{ resource.number_teaching_staff | number }}</strong>
+                </div>
+                <div>
+                    <span translate>Non teaching staff employed by Government</span>: <strong>{{ resource.number_non_teaching_staff_by_gov| number }}</strong>
+                </div>
+                <div>
+                    <span translate>Non teaching staff employed by School</span>: <strong>{{ resource.number_non_teaching_staff_by_school| number }}</strong>
+                </div>           
+            </div>
         </div>
     </div>
 </div>
