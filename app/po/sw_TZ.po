@@ -12,50 +12,354 @@ msgstr ""
 "X-Generator: Poedit 1.6.8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: app/index.html
-msgid "Dashboard"
-msgstr "Kiujumla"
+#: app/views/dashboard.html
+msgid "(Percentage)"
+msgstr "(Asilimia)"
+
+#: app/views/dashboard.html
+msgid "<abbr title=\"Certificate of Secondary Education Examination\" class=\"initialism\">(CSEE)</abbr> PASS <small class=\"text-muted\">(Percentage)</small>"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "<abbr title=\"Primary School Leaving Examination\" class=\"initialism\">(PSLE)</abbr> PASS <small class=\"text-muted\">(Percentage)</small>"
+msgstr ""
 
 #: app/views/main.html
-msgid "Filter map view"
-msgstr "Monekano wa ramani"
+msgid "<i class=\"glyphicon glyphicon-search\"></i>"
+msgstr ""
+
+#: app/index.html
+msgid ""
+"<img src=\"images/taarifa_small.png\" style=\"max-height: 100%\">\n"
+"       \t\tShule"
+msgstr ""
+
+#: app/views/main.html
+msgid "<small translate=\"\">District</small>"
+msgstr "<small translate=\"\">Wilaya</small>"
+
+#: app/views/main.html
+msgid "<small>Maximum</small>"
+msgstr "<small>Idadi</small>"
+
+#: app/views/dashboard.html
+msgid "<small>National rank</small>"
+msgstr "<small>Nafasi kitaifa</small>"
+
+#: app/views/dashboard.html
+msgid "Actual"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Before last year"
+msgstr "Kabla ya mwaka jana"
+
+#: app/views/dashboard.html
+msgid "Change"
+msgstr "Badilisha"
+
+#: app/views/dashboard.html
+msgid "Change from previous year"
+msgstr "Mabadiliko toka mwaka uliopita"
+
+#: .tmp/scripts/natdashboardctrl.js
+msgid "Change in % pass"
+msgstr "Mabadiliko ya ufaulu (%)"
+
+#: .tmp/scripts/prdashboardctrl.js
+#: .tmp/scripts/secdashboardctrl.js
+msgid "Change in % pass from previous year"
+msgstr "Mabadiliko ya ufaulu toka mwaka jana (%)"
+
+#: app/views/school.html
+msgid "Change in percentage pass"
+msgstr "Mabadiliko ya ufaulu (Asilimia)"
+
+#: app/views/dashboard.html
+msgid "Current percentage Pass"
+msgstr "Asilimia ya ufaulu"
+
+#: app/views/dashboard.html
+msgid "Current percentage pass"
+msgstr "Asilimia ya ufaulu"
+
+#: app/index.html
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: app/views/main.html
+#: app/views/school.html
+msgid "District"
+msgstr "Wilaya"
+
+#: app/views/dashboard.html
+#: app/views/main.html
+msgid "Download"
+msgstr "Pakua"
+
+#: app/views/dashboard.html
+msgid "Enrolment <small class=\"text-muted\">(Number of students)</small>"
+msgstr "Uandikishaji <small class=\"text-muted\">(Idadi ya wanafunzi)</small>"
+
+#: app/views/school.html
+msgid "Facilities"
+msgstr ""
+
+#: app/views/main.html
+msgid "Filter"
+msgstr "Chuja"
+
+#: app/views/dashboard.html
+msgid "Government"
+msgstr "Serikali"
+
+#: .tmp/scripts/natdashboardctrl.js
+#: .tmp/scripts/prdashboardctrl.js
+#: .tmp/scripts/secdashboardctrl.js
+msgid "Greater than"
+msgstr "Kubwa kuliko"
+
+#: .tmp/scripts/natdashboardctrl.js
+#: .tmp/scripts/prdashboardctrl.js
+#: .tmp/scripts/secdashboardctrl.js
+msgid "Greater than or equal to"
+msgstr "Kubwa kuliko au sawa"
 
 #: app/index.html
 msgid "Home"
-msgstr "Nyumbani"
+msgstr ""
 
-#: app/views/main.html
-msgid "LGA"
-msgstr "Halmashauri"
+#: app/views/dashboard.html
+#: app/views/school.html
+msgid "Last year"
+msgstr "Mwaka jana"
 
-#: app/views/main.html
-msgid "Max no. results"
-msgstr "Idadi"
+#: .tmp/scripts/natdashboardctrl.js
+#: .tmp/scripts/prdashboardctrl.js
+#: .tmp/scripts/secdashboardctrl.js
+msgid "Less than"
+msgstr "Ndogo kuliko"
+
+#: .tmp/scripts/natdashboardctrl.js
+#: .tmp/scripts/prdashboardctrl.js
+#: .tmp/scripts/secdashboardctrl.js
+msgid "Less than or equal to"
+msgstr "Ndogo kuliko au sawa"
+
+#: app/views/spinnerdlg.html
+msgid "Loading Data..."
+msgstr "Inapakia Data..."
+
+#: app/views/spinnerdlg.html
+msgid "Loading data."
+msgstr "Inapakia data"
 
 #: app/views/dashboard.html
 msgid "National"
 msgstr "Kitaifa"
 
+#: app/views/school.html
+msgid "National rank"
+msgstr "Nafasi kitaifa"
+
+#: app/views/dashboard.html
+msgid "Next year"
+msgstr "Mwaka ujao"
+
 #: .tmp/scripts/controllers.js
 msgid "No items match your filter criteria!"
-msgstr "Hakuna kinachok"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "No. of school with more than 10% improvement"
+msgstr ""
+
+#: app/views/school.html
+msgid "Non teaching staff employed by Government"
+msgstr ""
+
+#: app/views/school.html
+msgid "Non teaching staff employed by School"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Non-Teaching"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Number of Staff"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Number of candidates"
+msgstr ""
+
+#: app/views/dashboard.html
+#: app/views/school.html
+msgid "Number of passed candidates"
+msgstr ""
+
+#: .tmp/scripts/natdashboardctrl.js
+msgid "Number of passed students"
+msgstr ""
+
+#: .tmp/scripts/prdashboardctrl.js
+#: .tmp/scripts/secdashboardctrl.js
+msgid "Number of passed studets"
+msgstr ""
+
+#: app/views/school.html
+msgid "Number of pupils enrolled"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Number of schools"
+msgstr ""
+
+#: app/views/school.html
+msgid "Peformance"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Percentage Pass previuos year"
+msgstr ""
+
+#: app/views/school.html
+#: .tmp/scripts/natdashboardctrl.js
+msgid "Percentage pass"
+msgstr ""
+
+#: .tmp/scripts/prdashboardctrl.js
+#: .tmp/scripts/secdashboardctrl.js
+msgid "Percentage pass by district (this & last year)"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Position"
+msgstr "Nafasi"
+
+#: app/views/dashboard.html
+msgid "Pre-Primary Enrolment <small class=\"text-muted\">(Number of students)</small>"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Previous year"
+msgstr "Mwaka uliopita"
+
+#: app/views/dashboard.html
+msgid "Primary"
+msgstr "Shule ya msingi"
+
+#: app/views/dashboard.html
+msgid "Primary Enrolment <small class=\"text-muted\">(Number of students)</small>"
+msgstr ""
 
 #: app/views/dashboard.html
 msgid "Print"
 msgstr "Chapisha"
 
 #: app/views/dashboard.html
-msgid "Publish"
-msgstr "Sambaza"
+msgid "Private"
+msgstr "Binafsi"
+
+#: app/views/dashboard.html
+msgid "Rank"
+msgstr "Nafasi"
 
 #: app/views/main.html
+msgid "Refresh"
+msgstr ""
+
+#: app/views/dashboard.html
+#: app/views/main.html
+#: app/views/school.html
 msgid "Region"
 msgstr "Mkoa"
 
+#: app/views/school.html
+msgid "School code"
+msgstr "Namba ya shule"
+
 #: app/views/dashboard.html
-msgid "Regional"
-msgstr "Kimkoa"
+msgid "School name"
+msgstr "Jina la shule"
+
+#: app/views/school.html
+msgid "School type"
+msgstr "Aina ya shule"
+
+#: app/views/dashboard.html
+msgid "Secondary"
+msgstr "Sekondari"
+
+#: app/views/dashboard.html
+msgid "Secondary Enrolment (O' level) <small class=\"text-muted\">(Number of students)</small>"
+msgstr ""
+
+#: app/views/dashboard.html
+msgid "Secondary Enrolmnet (A' level) <small class=\"text-muted\">(Number of students)</small>"
+msgstr ""
 
 #: app/index.html
-msgid "Taarifa Schools"
-msgstr "Taarifa za Shule"
+msgid "Shule"
+msgstr "Shule"
+
+#: app/views/dashboard.html
+msgid "Target"
+msgstr "malengo"
+
+#: app/views/school.html
+msgid "Teachers"
+msgstr "Waalimu"
+
+#: app/views/dashboard.html
+msgid "Teaching"
+msgstr "Wanaofundisha"
+
+#: app/views/spinnerdlg.html
+msgid "This may take a while depending on your connection"
+msgstr "Hii inaweza kuchukua muda kutegemeana na hali ya mtandao"
+
+#: app/views/dashboard.html
+msgid "This year"
+msgstr "Mwaka huu"
+
+#: app/views/dashboard.html
+msgid "Top Primary schools"
+msgstr "Shule za msingi zinazongoza"
+
+#: app/views/dashboard.html
+msgid "Top Secondary schools"
+msgstr "Shule za sekondari zinazongoza"
+
+#: app/views/dashboard.html
+msgid "Top schools"
+msgstr "Shule zinazongoza"
+
+#: app/views/dashboard.html
+msgid "Total"
+msgstr "Jumla"
+
+#: app/views/school.html
+msgid "Total number of candidates"
+msgstr "Idadi ya watahiniwa"
+
+#: app/views/dashboard.html
+msgid "Total number of schools"
+msgstr "Jumla ya idadi ya shule"
+
+#: app/views/main.html
+msgid "Type"
+msgstr "Aina"
+
+#: .tmp/scripts/natdashboardctrl.js
+msgid "primary"
+msgstr "shule ya msingi"
+
+#: .tmp/scripts/natdashboardctrl.js
+msgid "secondary"
+msgstr "sekondari"
+
+#: app/views/dashboard.html
+msgid "{{ schools.x }}"
+msgstr ""
