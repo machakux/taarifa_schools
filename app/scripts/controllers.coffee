@@ -58,6 +58,7 @@ angular.module('taarifaApp')
 
     $scope.updateMap = (nozoom) ->
       $location.search($scope.where)
+      $scope.order = """[["national_rank", 1]]"""
       where = {}
       if $scope.where.region
         where.region = $scope.where.region
@@ -74,21 +75,21 @@ angular.module('taarifaApp')
       if $scope.where.search
         where.$text =
           $search: '\"' + $scope.where.search + '\"'
-      query where, $scope.where.max_results, nozoom
+      query where, $scope.where.max_results, $scope.order, nozoom
 
     $scope.reset = ->
       $scope.resetParameters()
       $scope.updateMap()
 
     $scope.download = ->
-      downloadUrl = $scope.resourceBaseURI + 'download' + $location.url()
+      downloadUrl = $scope.resourceBaseURI + 'download' + $location.url() + '&sort=' + $scope.order
       $window.open(downloadUrl)
 
-    query = (where, max_results, nozoom) ->
+    query = (where, max_results, order, nozoom) ->
       map.clearMarkers()
       MainResource.query
         max_results: max_results
-        sort: """[("national_rank", 1)]"""
+        sort: order
         where: where
         projection:
           _id: 1

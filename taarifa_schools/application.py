@@ -39,22 +39,26 @@ def resource_download():
     params = dict(request.args.items())
     fmt = params.pop('fmt', 'csv')
     fields = params.pop('fields', None)
-    limit = params.pop('max_results', 0)
+    limit = params.pop('max_results', 1000)
     sort = params.pop('sort', None)
+    search = params.pop('search', None)
     if sort:
         sort = json.loads(sort)
-
     if limit:
         try:
             limit = int(limit)
+            if limit > 1000 or limit < 0:
+                limit = 1000
         except:
-            limit = 0
+            limit = 1000
     if fields:
         fields = fields.split(',')
+    if search:
+        params['$text'] = {'$search': '\"' + search + '\"'}
     # FIXME: Direct call to the PyMongo driver, should be abstracted
     data = list(
         app.data.driver.db['resources'].find(
-            params).sort(sort).limit(limit))
+            params, sort=sort).limit(limit))
     if fmt == 'csv':
         for item in data:
             location = item.get('location')
