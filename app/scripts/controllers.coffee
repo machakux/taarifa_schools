@@ -31,9 +31,11 @@ angular.module('taarifaApp')
   .controller 'MainCtrl', ($scope, $http, $location, $window, MainResource, Map, flash, gettext) ->
 
     map = Map "poiMap", showScale:true
+    $scope.defaultRegion = 'Dar es Salaam'
     $scope.where = $location.search()
     $scope.schoolTypes = ['primary', 'secondary']
     $scope.where.max_results = parseInt($scope.where.max_results) || 100000
+    $scope.where.region = $scope.defaultRegion
     
     getDistricts = () ->
       $http.get($scope.resourceBaseURI + 'values/district', cache: true).success (districts) ->
@@ -53,6 +55,7 @@ angular.module('taarifaApp')
     $scope.resetParameters = ->
       $scope.where = 
         max_results: 100000
+        region: $scope.defaultRegion
       getRegions()
       getDistricts()
 
