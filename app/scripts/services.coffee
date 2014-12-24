@@ -330,11 +330,11 @@ angular.module('taarifaApp')
         else if status == 'needs repair'
           color = 'orange'
         else
-          color = 'black'
+          color = 'green'
 
         icon = L.AwesomeMarkers.icon
           prefix: 'glyphicon',
-          icon: 'tint',
+          icon: 'book',
           markerColor: color
 
       makeMarker = (poi) ->
@@ -349,7 +349,7 @@ angular.module('taarifaApp')
             fillColor: statusColor(poi.status_group)
         else
           m = L.marker L.latLng(lat,lng),
-              icon: makeAwesomeIcon(poi.status_group)
+              icon: makeAwesomeIcon('default')
 
       @addPOI = (pois) ->
         spinner.spin()
