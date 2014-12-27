@@ -1,6 +1,10 @@
 {
   "name": "taarifa_schools",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/machakux/taarifa_schools.git"
+  },
   "dependencies": {
     "grunt": "~0.4.1",
     "grunt-angular-gettext": "~0.2.14",
