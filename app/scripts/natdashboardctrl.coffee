@@ -266,7 +266,6 @@ angular.module('taarifaApp')
         $window.open(url + '?fmt=csv')
       if $scope.schoolTypeChoice and $scope.schoolTypeChoice isnt 'all'
           url += '?school_type=' + $scope.schoolTypeChoice
-          return
       $http.get(url, cache: cacheHttp)
         .success (data, status, headers, config) ->
           $scope.performanceData = data

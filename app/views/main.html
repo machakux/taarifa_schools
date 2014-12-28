@@ -1,9 +1,9 @@
 <div class="row">
 
-    <div class="col-sm-3">
+    <div class="col-sm-4 map-list-container">
         <div class="left-panel">
             <div class="panel panel-default">
-                <div class="panel-heading"><h3 class="panel-title" translate>Filter</h3></div>
+                <div class="panel-heading"><strong class="panel-title" translate>Filter</strong></div>
                 <div class="panel-body">
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
@@ -40,10 +40,10 @@
                     </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3" for="maxResults" translate><small>Maximum</small></label>
+                        <label class="col-lg-3" for="maxResults" translate><small>Ownership</small></label>
                         <div class="col-lg-9">
-                            <select class="form-control input-sm" id="maxResults" ng-model="where.max_results" ng-change="updateMap()"
-                                    ng-options="k for k in [25, 50, 100, 200, 500, 1000]">
+                            <select class="form-control input-sm" id="ownership" ng-model="where.ownership" ng-change="updateMap()"
+                                    ng-options="o for o in ownerships">
                                 <option value="">all</option>
                             </select>
                         </div>
@@ -54,6 +54,7 @@
                     <button class="btn btn-warning btn-xs" ng-click="reset()">
                         <i class="glyphicon glyphicon-refresh"></i> <span translate>Refresh</span>
                     </button>
+                    <small ng-if="count >= 0" class="text-muted" translate>{{ count }} schools found</small>
                 </form>
               </div>
             </div>
@@ -62,7 +63,7 @@
                     <div class="panel-heading">
                         <div class="panel-title">
                             <div class="row">
-                                <div class="col-sm-9"><a ng-href="#/schools/{{ result._id }}">{{ result.name }}</a></div>
+                                <div class="col-sm-9"><a ng-href="#/schools/{{ result._id }}"><strong>{{ result.name }}</strong></a></div>
                                 <div class="col-sm-3"><small class="text-muted text-capfirst">{{ result.school_type }}</small></div>
                             </div>
                         </div>
@@ -76,7 +77,8 @@
                             </div>
                             <div class="col-sm-6 small">
                                 <span class="text-muted">Region</span>: {{ result.region }}<br>
-                                <span class="text-muted">District</span>: {{ result.district }}
+                                <span class="text-muted">District</span>: {{ result.district }}<br>
+                                <span class="text-muted">Ownership</span>: {{ result.ownership }}
                             </div>
                         </div>
                     </div>
@@ -87,7 +89,7 @@
     </div>
         
 
-    <div class="col-sm-9">
+    <div class="col-sm-8 map-container">
         <div id="poiMap"></div>
     </div>
 </div>

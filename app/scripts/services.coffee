@@ -284,23 +284,23 @@ angular.module('taarifaApp')
         cleanKey = (k) ->
           $filter('titlecase')(k.replace("_"," "))
 
-        cleanValue = (k,v) ->
-          if v instanceof Date
-            v.getFullYear()
-          else if k == "location"
-            v.coordinates.toString()
-          else
-            v
+        cleanValue = (v) ->
+            if v? then v else '-'
 
-        header = '<h5><a href="#/schools/' + poi._id + '">' + poi.name + '</a></h5>'
+        header = '<h3 class="popup-title"><a href="#/schools/' + poi._id + '">' + poi.name + '</a></h3>'
 
         # FIXME: can't this be offloaded to angular somehow?
-        fields = _.keys(poi).sort().map((k) ->
-            #cleanKey(k) + String(cleanValue(k, poi[k]))
-            '<span class="popup-key">' + cleanKey(k) + '</span>: ' +
-            '<span class="popup-value">' + String(cleanValue(k,poi[k])) + '</span>'
-          ).join('<br />')
-
+        fields = '' +
+            '<div class="popup-field"><span class="popup-key text-muted">Center code</span>: <span class="popup-value text-capitalize text-info">' + poi.code + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Type</span>: <span class="popup-value text-capitalize text-info">' + poi.school_type + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Number of candidates</span>: <span class="popup-value text-capitalize text-info">' + poi.candidates + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Passed candidates</span>: <span class="popup-value text-capitalize text-info">' + poi.number_pass + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Percentage pass</span>: <span class="popup-value text-capitalize text-info">' + poi.percentage_pass + ' %</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">National rank</span>: <span class="popup-value text-capitalize text-info">' + poi.national_rank + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Ownership</span>: <span class="popup-value text-capitalize text-info">' + cleanValue(poi.ownership) + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Region</span>: <span class="popup-value text-capitalize text-info">' + poi.region + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">District</span>: <span class="popup-value text-capitalize text-info">' + poi.district + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Ward</span>: <span class="popup-value text-capitalize text-info">' + cleanValue(poi.ward) + '</span></div>'
         html = '<div class="popup">' + header + fields + '</div>'
 
       @openPopup = (marker_id) ->

@@ -1,6 +1,8 @@
 /* http://angular-ui.github.io/bootstrap/#/getting_started */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
-
+.navbar.navbar-main {
+    margin-bottom: 0;
+}
 .form-control {
   padding: 3px;
 }
@@ -260,13 +262,25 @@ div.region-info {
   padding: 0px;
 }
 
-.popup {
-  height: 100px;
-  overflow-y: scroll;
+.leaflet-popup-content-wrapper{
+    border-radius: 0;
+}
+.popup-title{
+    font-size: 1.3em;
+    font-weight: bold;
+    border-bottom: 1px solid #DDD;
+    padding-bottom: 12px;
+}
+.popup-field{
+    font-size:13px;
+    font-weight: 200;
+    text-align: justify;
+    line-height: 22px;
 }
 
 .popup-key {
   font-weight: bold;
+  margin-right: 15px
 }
 
 .statusSelector label {
@@ -279,6 +293,12 @@ div.region-info {
 
 .bordered-right{
     border-right: 1px solid #DDD;
+}
+.map-container{
+    padding: 0;
+}
+.map-list-container{
+    padding: 0;
 }
 .left-panel{
     height: 700px;

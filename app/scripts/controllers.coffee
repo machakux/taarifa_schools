@@ -45,8 +45,13 @@ angular.module('taarifaApp')
       $http.get($scope.resourceBaseURI + 'values/region', cache: true).success (regions) ->
         $scope.regions = regions
 
+    getOwnerships = () ->
+      $http.get($scope.resourceBaseURI + 'values/ownership', cache: true).success (ownerships) ->
+        $scope.ownerships = ownerships
+
     getRegions()
     getDistricts()
+    getOwnerships()
 
     $scope.clearDistrict = ->
       $scope.where.district = null
@@ -75,6 +80,8 @@ angular.module('taarifaApp')
         where.district = $scope.where.district
       if $scope.where.school_type
         where.school_type = $scope.where.school_type
+      if $scope.where.ownership
+        where.ownership = $scope.where.ownership
       if $scope.where.search
         where.$text =
           $search: '\"' + $scope.where.search + '\"'
@@ -90,6 +97,7 @@ angular.module('taarifaApp')
 
     query = (where, max_results, order, nozoom) ->
       map.clearMarkers()
+      $scope.results = []
       MainResource.query
         max_results: max_results
         sort: order
@@ -100,10 +108,14 @@ angular.module('taarifaApp')
           school_type: 1
           region: 1
           district: 1
+          ward: 1
           national_rank: 1
+          candidates: 1
+          number_pass: 1
           percentage_pass: 1
           location: 1
           code: 1
+          ownership: 1
         strip: 1
       , (results) ->
         if results._items.length == 0
@@ -111,6 +123,7 @@ angular.module('taarifaApp')
           spinner.stop()
           return
         $scope.results = results._items
+        $scope.count = results._meta.total
         map.addPOI(results._items)
         map.zoomToMarkers() unless nozoom
 
