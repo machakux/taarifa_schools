@@ -43,9 +43,7 @@
 }
 #poiMap{
     display: block;
-    max-height: 100%;
-    width: 100%;
-    min-height: 700px;
+    height: 700px;
 }
 /* Stacked bar chart */
 
@@ -301,9 +299,7 @@ div.region-info {
     padding: 0;
 }
 .left-panel{
-    height: 700px;
     max-height: 100%;
-    overflow: auto;
     display: block;
     background: #FBFBFB
 }
@@ -315,6 +311,22 @@ div.region-info {
     height: 200px;
     display: block;
 }
+/* Responsive: Portrait tablets and up */
+@media screen and (max-width: 768px) {
+    #poiMap{
+        display: block;
+        height:300px;
+        overflow: hidden;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .left-panel{
+        height: 700px;
+        overflow: auto;
+    }
+}
+    
 @media print 
 {
     .no-print{display: none}
