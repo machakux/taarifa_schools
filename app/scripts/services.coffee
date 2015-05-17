@@ -291,16 +291,16 @@ angular.module('taarifaApp')
 
         # FIXME: can't this be offloaded to angular somehow?
         fields = '' +
-            '<div class="popup-field"><span class="popup-key text-muted">Center code</span>: <span class="popup-value text-capitalize text-info">' + poi.code + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">Type</span>: <span class="popup-value text-capitalize text-info">' + poi.school_type + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">Number of candidates</span>: <span class="popup-value text-capitalize text-info">' + poi.candidates + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">Passed candidates</span>: <span class="popup-value text-capitalize text-info">' + poi.number_pass + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">Percentage pass</span>: <span class="popup-value text-capitalize text-info">' + poi.percentage_pass + ' %</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">National rank</span>: <span class="popup-value text-capitalize text-info">' + poi.national_rank + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">Ownership</span>: <span class="popup-value text-capitalize text-info">' + cleanValue(poi.ownership) + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">Region</span>: <span class="popup-value text-capitalize text-info">' + poi.region + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">District</span>: <span class="popup-value text-capitalize text-info">' + poi.district + '</span></div>' +
-            '<div class="popup-field"><span class="popup-key text-muted">Ward</span>: <span class="popup-value text-capitalize text-info">' + cleanValue(poi.ward) + '</span></div>'
+            '<div class="popup-field"><span class="popup-key text-muted">Center code</span>: <span class="popup-value text-capitalize text-primary">' + poi.code + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Type</span>: <span class="popup-value text-capitalize text-primary">' + poi.school_type + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Number of candidates</span>: <span class="popup-value text-capitalize text-primary">' + poi.candidates + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Passed candidates</span>: <span class="popup-value text-capitalize text-primary">' + poi.number_pass + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Percentage pass</span>: <span class="popup-value text-capitalize text-primary">' + poi.percentage_pass + ' %</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">National rank</span>: <span class="popup-value text-capitalize text-primary">' + poi.national_rank + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Ownership</span>: <span class="popup-value text-capitalize text-primary">' + cleanValue(poi.ownership) + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Region</span>: <span class="popup-value text-capitalize text-primary">' + poi.region + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">District</span>: <span class="popup-value text-capitalize text-primary">' + poi.district + '</span></div>' +
+            '<div class="popup-field"><span class="popup-key text-muted">Ward</span>: <span class="popup-value text-capitalize text-primary">' + cleanValue(poi.ward) + '</span></div>'
         html = '<div class="popup">' + header + fields + '</div>'
 
       @openPopup = (marker_id) ->
