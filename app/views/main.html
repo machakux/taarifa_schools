@@ -12,7 +12,7 @@
                 <form class="form-horizontal" role="form">
                     <div class="form-group">
                         <div class="col-xs-9">
-                            <input type="search" id="search" class="form-control input-sm" ng-model="where.search" placeholder="Search ...">
+                            <input type="search" id="search" class="form-control input-sm" ng-model="where.search" placeholder="Search for school...">
                         </div>
                         <button class="col-xs-2 btn btn-info btn-sm" ng-click="updateMap()" translate><i class="glyphicon glyphicon-search"></i></button>
                     </div>
@@ -67,22 +67,50 @@
                     <div class="panel-heading">
                         <div class="panel-title">
                             <div class="row">
-                                <div class="col-sm-9"><a ng-href="#/schools/{{ result._id }}"><strong>{{ result.name }}</strong></a></div>
-                                <div class="col-sm-3"><small class="text-muted text-capfirst">{{ result.school_type }}</small></div>
+                                <div class="col-sm-9">
+									<a ng-href="#/schools/{{ result._id }}" class="text-uppercase"><strong>{{ result.name }}</strong></a><br>
+									<small class="text-muted">{{ result.region }}, {{ result.district }}</small>
+								</div>
+                                <div class="col-sm-3">
+									<small class="text-muted text-capfirst">{{ result.school_type }}</small><br>
+									<small class="text-muted">{{ result.code }}</small>
+								</div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-sm-6 small">
-                                <span class="text-muted">Code</span>: {{ result.code }}<br>
-                                <span class="text-muted">National rank</span>: {{ result.national_rank }}<br>
-                                <span class="text-muted">Pass</span>: {{ result.percentage_pass | number }} %
+                            <div class="col-sm-6">
+                                <span class="text-muted">National rank</span>: <span class="lead text-muted"><strong>{{ result.national_rank }}</strong></span><br>
+                                <span class="text-muted">Pass</span>:
+                                <span class="lead">
+									<span ng-class="{
+										'text-success': result.percentage_pass >= 60, 
+										'text-warning': result.percentage_pass >= 40 && result.percentage_pass < 60,
+										'text-danger': result.percentage_pass < 40 }">
+										<strong>{{ result.percentage_pass | number:0 }} %</strong>
+									</span>
+									<i class="glyphicon" ng-class="{
+										'glyphicon-arrow-up text-success': result.percentage_pass_change > 0,
+										'glyphicon-arrow-down text-danger': result.percentage_pass_change < 0,
+										'glyphicon-arrow-right text-muted': result.percentage_pass_change == 0
+										}">
+									</i>
+								</span><br>
+								<span class="text-muted">Candidates</span>: <span class="lead text-muted"><strong>{{ result.candidates }}</strong></span>
                             </div>
-                            <div class="col-sm-6 small">
-                                <span class="text-muted">Region</span>: {{ result.region }}<br>
-                                <span class="text-muted">District</span>: {{ result.district }}<br>
-                                <span class="text-muted">Ownership</span>: {{ result.ownership }}
+                            <div class="col-sm-6">
+                                <span ng-if="result.ownership != undefined"><span class="text-muted">Owner</span>: <strong class="text-capitalize">{{ result.ownership }}</strong><br></span>
+                                <span ng-if="result.number_enrolled != undefined && result.number_teaching_staff != undefined">
+									<span class="text-muted">Pupils-teacher ratio</span>
+									<span class="lead" ng-class="{
+										'text-success': result.number_enrolled/result.number_teaching_staff <= 50,
+										'text-danger': result.number_enrolled/result.number_teaching_staff > 50 }">
+										<strong>{{ result.number_enrolled/result.number_teaching_staff | number:0 }}</strong>
+									</span><br>
+                                </span>
+								<span ng-if="result.number_enrolled != undefined"><span class="text-muted">Students</span>: <span class="lead text-muted"><strong>{{ result.number_enrolled }}</strong></span><br></span>
+								<span ng-if="result.number_teaching_staff != undefined"><span class="text-muted">Teachers</span>: <span class="lead text-muted"><strong>{{ result.number_teaching_staff }}</strong></span></span>
                             </div>
                         </div>
                     </div>

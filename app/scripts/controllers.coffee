@@ -113,6 +113,9 @@ angular.module('taarifaApp')
           candidates: 1
           number_pass: 1
           percentage_pass: 1
+          percentage_pass_change: 1
+          number_teaching_staff: 1
+          number_enrolled: 1
           location: 1
           code: 1
           ownership: 1
