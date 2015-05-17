@@ -47,7 +47,6 @@ function plotMultiBarChart(selector, data){
 
   nv.addGraph(function() {
       var chart = nv.models.multiBarChart()
-        .transitionDuration(350)
         .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
         .rotateLabels(40)      //Angle to rotate x-axis labels.
         .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
@@ -70,7 +69,6 @@ function plotMultiBarHorizontalChart(selector, data){
     var chart = nv.models.multiBarHorizontalChart()
         .showValues(false)           //Show bar value next to each bar.
         .tooltips(true)             //Show tooltips on hover.
-        .transitionDuration(350)
         .showControls(false);        //Allow user to switch between "Grouped" and "Stacked" mode.
 
     chart.yAxis.tickFormat(d3.format(',.2f'));
