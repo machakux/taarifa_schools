@@ -97,7 +97,8 @@
 										}">
 									</i>
 								</span><br>
-								<span class="text-muted">Candidates</span>: <span class="lead text-muted"><strong>{{ result.candidates }}</strong></span>
+								<span class="text-muted">Total Candidates</span>: <span class="lead text-muted"><strong>{{ result.candidates }}</strong></span><br>
+								<span class="text-muted">Passed Candidates</span>: <span class="lead text-muted"><strong>{{ result.number_pass }}</strong></span>
                             </div>
                             <div class="col-sm-6">
                                 <span ng-if="result.ownership != undefined"><span class="text-muted">Owner</span>: <strong class="text-capitalize">{{ result.ownership }}</strong><br></span>
