@@ -67,11 +67,11 @@
                     <div class="panel-heading">
                         <div class="panel-title">
                             <div class="row">
-                                <div class="col-sm-9">
+                                <div class="col-xs-9">
 									<a ng-href="#/schools/{{ result._id }}" class="text-uppercase"><strong>{{ result.name }}</strong></a><br>
 									<small class="text-muted">{{ result.region }}, {{ result.district }}</small>
 								</div>
-                                <div class="col-sm-3">
+                                <div class="col-xs-3">
 									<small class="text-muted text-capfirst">{{ result.school_type }}</small><br>
 									<small class="text-muted">{{ result.code }}</small>
 								</div>
@@ -80,7 +80,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-xs-6">
                                 <span class="text-muted">National rank</span>: <span class="lead text-muted"><strong>{{ result.national_rank }}</strong></span><br>
                                 <span class="text-muted">Pass</span>:
                                 <span class="lead">
@@ -100,7 +100,7 @@
 								<span class="text-muted">Total Candidates</span>: <span class="lead text-muted"><strong>{{ result.candidates }}</strong></span><br>
 								<span class="text-muted">Passed Candidates</span>: <span class="lead text-muted"><strong>{{ result.number_pass }}</strong></span>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-xs-6">
                                 <span ng-if="result.ownership != undefined"><span class="text-muted">Owner</span>: <strong class="text-capitalize">{{ result.ownership }}</strong><br></span>
                                 <span ng-if="result.number_enrolled != undefined && result.number_teaching_staff != undefined">
 									<span class="text-muted">Pupils-teacher ratio</span>
