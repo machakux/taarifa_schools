@@ -62,7 +62,7 @@
                 </form>
               </div>
             </div>
-            <div ng-repeat="result in results.slice(1,100)" class="results-item" ng-mouseover="openPopup(result._id)" ng-mouseout="closePopup(result._id)">
+            <div ng-repeat="result in results.slice(0,100)" class="results-item" ng-mouseover="openPopup(result._id)" ng-mouseout="closePopup(result._id)">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title">
