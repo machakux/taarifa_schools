@@ -2,94 +2,70 @@
 
     <div class="row">
         <div class="col-lg-6">
+            <div id="mapView" style="height: 400px; width: 100%; display: block"></div>
+        </div>
+        <div class="col-lg-6">
             <div class="page-header">
                 <h1>{{ resource.name }}</h1>
             </div>
             
-            <div class="well">
-                <div style="font-size: 1.1em">
-                    <span translate class="text-muted">School code</span>: {{ resource.code }}
-                </div>
-            </div>
+            <div style="font-size: 1.1em"class="text-right" >
+                <span translate>Center code</span>: <span class="text-muted"><strong>{{ resource.code }}</strong></span>,
+                <span translate>School type</span>: <span class="text-muted"><strong>{{ resource.school_type }}</strong></span><br>
+                <span translate>Region</span>: <span class="text-muted"><strong>{{ resource.region }}</strong></span>,
+                <span translate>District</span>: <span class="text-muted"><strong>{{ resource.district }}</strong></span>
+                <span ng-if="resource.ward != undefined">, <span translate>Ward</span>: <span class="text-muted"><strong>{{ resource.ward }}</strong></span></span>
+            </div><hr>
             
             <div class="container-fluid">
                 <div>
-                    <span translate>Region</span>: <strong>{{ resource.region }}</strong>
-                </div>
-                <div>
-                    <span translate>District</span>: <strong>{{ resource.district }}</strong>
-                </div>
-                <div>
-                    <span translate>National rank</span>: <strong>{{ resource.national_rank }}</strong>
-                </div>
-                <hr>
-                
-                <h4>
-                    <span class="text-muted" translate>School type</span>: <span class="text-capitalize">{{ resource.school_type }}</span>
-                </h4>
-                <hr>
-                
-                <div>
-                    <div class="text-muted text-right" translate>Peformance</div>
                     <div>
-                        <span translate>National rank</span>: <strong>{{ resource.national_rank }}</strong>
+                        <span translate>National rank</span>: <span class="lead text-muted"><strong>{{ resource.national_rank }}</strong></span>
                     </div>
                     <div>
-                        <span translate>Percentage pass</span>: <strong>{{ resource.percentage_pass| number:2 }} %</strong>
+                        <span translate>Pass</span>:
+                        <span class="lead" ng-class="{
+                                'text-success': resource.percentage_pass >= 60, 
+                                'text-warning': resource.percentage_pass >= 40 && resource.percentage_pass < 60,
+                                'text-danger': resource.percentage_pass < 40 }">
+                            <strong>{{ resource.percentage_pass| number:0 }} %</strong>
+                            <i class="glyphicon" ng-class="{
+                                'glyphicon-arrow-up text-success': resource.percentage_pass_change > 0,
+                                'glyphicon-arrow-down text-danger': resource.percentage_pass_change < 0,
+                                'glyphicon-arrow-right text-muted': resource.percentage_pass_change == 0}">
+                            </i>
+                        </span>
+                    </div>  
+
+                    <div>
+                        <span translate>Total candidates</span>: <span class="lead text-muted"><strong>{{ resource.candidates }}</strong></span>
                     </div>
                     <div>
-                        <span translate>Total number of candidates</span>: <strong>{{ resource.candidates }}</strong>
+                        <span translate>Passed candidates</span>: <span class="lead text-muted"><strong>{{ resource.number_pass }}</strong></span>
                     </div>
                     <div>
-                        <span translate>Number of passed candidates</span>: <strong>{{ resource.number_pass }}</strong>
-                    </div>
-                    <div>
-                        <span translate>Change in percentage pass</span>: <strong>{{ resource.percentage_pass_change| number:2 }} %</strong>
+                        <span translate>Change in percentage pass</span>:
+                        <span class="lead text-muted">
+                            <strong>{{ resource.percentage_pass_change| number:0 }} %</strong>
+                        </span>
                     </div>                
                 </div>
                 <hr>
                 
-                <div>
-                    <div class="text-muted text-right" translate>Last year</div>
-                    <div>
-                        <span translate>National rank</span>: <strong>{{ resource.national_rank_last }}</strong>
-                    </div>
-                    <div>
-                        <span translate>Percentage pass</span>: <strong>{{ resource.percentage_pass_last| number:2 }} %</strong>
-                    </div>
-                    <div>
-                        <span translate>Total number of candidates</span>: <strong>{{ resource.candidates_last }}</strong>
-                    </div>
-                    <div>
-                        <span translate>Number of passed candidates</span>: <strong>{{ resource.number_pass_last }}</strong>
-                    </div>
-                    <div>
-                        <span translate>Change in percentage pass</span>: <strong>{{ resource.percentage_pass_change_last| number:2 }} %</strong>
-                    </div>                
-                </div>
-
-            </div>
-        </div>
-        
-        <div class="col-lg-6">
-            <div id="mapView" style="height: 400px; width: 100%; display: block"></div>
-            
-            <hr>
-
             <div>
-                <div class="text-muted text-right" translate>Facilities</div>
-                <div>
-                    <span translate>Number of pupils enrolled</span>: <strong>{{ resource.number_enrolled| number }}</strong>
-                </div>
-                <div>
-                    <span translate>Teachers</span>: <strong>{{ resource.number_teaching_staff | number }}</strong>
-                </div>
-                <div>
-                    <span translate>Non teaching staff employed by Government</span>: <strong>{{ resource.number_non_teaching_staff_by_gov| number }}</strong>
-                </div>
-                <div>
-                    <span translate>Non teaching staff employed by School</span>: <strong>{{ resource.number_non_teaching_staff_by_school| number }}</strong>
-                </div>           
+                <span ng-if="resource.ownership != undefined"><span class="text-muted">Owner</span>: <strong class="text-capitalize">{{ resource.ownership }}</strong><br></span>
+                <span ng-if="resource.number_enrolled != undefined && resource.number_teaching_staff != undefined">
+                <span ng-if="resource.number_enrolled != undefined"><span class="text-muted">Number of pupils enrolled</span>: <span class="lead text-muted"><strong>{{ resource.number_enrolled }}</strong></span><br></span>
+                <span ng-if="resource.number_teaching_staff != undefined"><span class="text-muted">Number of teaching staff</span>: <span class="lead text-muted"><strong>{{ resource.number_teaching_staff }}</strong></span><br></span>
+                    <span class="text-muted">Pupils-teacher ratio</span>
+                    <span class="lead" ng-class="{
+                        'text-success': resource.number_enrolled/resource.number_teaching_staff <= 50,
+                        'text-danger': resource.number_enrolled/resource.number_teaching_staff > 50 }">
+                        <strong>{{ resource.number_enrolled/resource.number_teaching_staff | number:0 }}</strong>
+                    </span><br>
+                </span>
+            </div>
+
             </div>
         </div>
     </div>
